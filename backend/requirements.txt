@@ -1,0 +1,6 @@
+fastapi   # wo tool jisse hum apna API (backend ka dimaag) banayenge
+uvicorn   # wo tool jo is API ko "on/chalu" karta hai
+sqlalchemy
+psycopg2-binary   # database (data store karne ki jagah) se baat karne ke tools
+python-dotenv
+pydantic-settings  # password/secret settings sambhalne ke tools
