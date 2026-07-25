@@ -1,0 +1,1 @@
+DATABASE_URL = "postgresql://yieldsense_user:yieldsense_pass@localhost:5432/yieldsense_db"

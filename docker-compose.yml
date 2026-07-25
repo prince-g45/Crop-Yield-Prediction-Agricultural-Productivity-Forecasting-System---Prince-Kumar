@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: postgres:16              # "Mujhe PostgreSQL version 16 chahiye"
+    environment:
+      POSTGRES_USER: yieldsense_user     # "Iska username ye rakhna"
+      POSTGRES_PASSWORD: yieldsense_pass #  "Password ye rakhna"
+      POSTGRES_DB: yieldsense_db         #  "Database ka naam ye rakhna"
+    ports:
+      - "5432:5432"                # "Isko is number wale darwaze se accessible banana"
