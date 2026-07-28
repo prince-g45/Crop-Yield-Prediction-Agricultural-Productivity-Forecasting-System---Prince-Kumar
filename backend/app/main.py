@@ -1,21 +1,30 @@
-# FastAPI import kar rahe hai
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-# Humara database engine aur Base template import kar rahe hai
 from app.db.session import engine, Base
-
-# User table ka blueprint import kar rahe hai
-# (Isko import karna zaroori hai taaki Python ko iske baare mein pata chale)
 from app.models import user
+from app.api.v1.auth import router as auth_router
 
-
-# Ye line asli kaam karti hai:
-# Base template se jitne bhi tables define kiye hai (jaise User),
-# unko PostgreSQL database mein bana deti hai (agar pehle se nahi bane hai)
 Base.metadata.create_all(bind=engine)
 
-
 app = FastAPI()
+
+# CORS Configuration
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(
+    auth_router,
+    prefix="/api/v1/auth",
+    tags=["Authentication"]
+)
 
 
 @app.get("/")

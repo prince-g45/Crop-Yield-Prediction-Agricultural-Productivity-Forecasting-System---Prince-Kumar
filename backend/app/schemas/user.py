@@ -1,17 +1,35 @@
-# Pydantic se BaseModel import kar rahe hai
-# Ye FastAPI ko batata hai "aane wala data kaisa dikhna chahiye"
+# Pydantic se BaseModel aur EmailStr import kar rahe hain
+# BaseModel -> API ke request aur response ka structure define karta hai
+# EmailStr -> Email ka format automatically validate karta hai
 from pydantic import BaseModel, EmailStr
 
 
-# Ye "schema" define karta hai signup ke waqt kya data chahiye
+# ==========================
+# Signup Request Schema
+# ==========================
+# Jab naya user account banayega (Signup),
+# tab ye data frontend se aayega.
 class UserCreate(BaseModel):
-    full_name: str      # Naam text mein hona chahiye
-    email: EmailStr     # Email sahi format mein hona chahiye (jaise abc@xyz.com)
-    password: str       # Password text mein hona chahiye
+    full_name: str
+    email: EmailStr
+    password: str
 
 
-# Ye schema define karta hai ki response mein kya wapas bhejna hai
-# (Password wapas nahi bhejenge, security ke liye)
+# ==========================
+# Login Request Schema
+# ==========================
+# Login ke time sirf Email aur Password chahiye.
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+
+# ==========================
+# API Response Schema
+# ==========================
+# User create ya fetch hone ke baad
+# frontend ko kya data bhejna hai.
+# Security ke liye password kabhi response me nahi bhejte.
 class UserResponse(BaseModel):
     id: int
     full_name: str
@@ -19,4 +37,4 @@ class UserResponse(BaseModel):
     role: str
 
     class Config:
-        from_attributes = True  # Isse database object ko seedha response bana sakte hai
+        from_attributes = True
