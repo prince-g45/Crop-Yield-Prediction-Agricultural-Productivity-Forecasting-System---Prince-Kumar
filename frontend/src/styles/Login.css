@@ -1,97 +1,326 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* ===========================
+   RESET
+=========================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f4f6f9;
+body{
+    font-family:'Segoe UI',sans-serif;
 }
 
-.login-container {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 30px;
+/* ===========================
+   BACKGROUND
+=========================== */
+
+.login-container{
+
+    width:100%;
+    min-height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    padding:110px 20px 40px;
+
+    background:
+    linear-gradient(
+        rgba(0,0,0,.45),
+        rgba(0,0,0,.45)
+    ),
+    url("../assets/background.jpg");
+
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+
 }
 
-.login-card {
-    width: 450px;
-    background: white;
-    padding: 35px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    box-shadow: 0px 5px 18px rgba(0,0,0,0.08);
+/* ===========================
+   GLASS CARD
+=========================== */
+
+.login-card{
+
+    width:420px;
+
+    padding:35px;
+
+    border-radius:22px;
+
+    background:rgba(255,255,255,.18);
+
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.25);
+
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
+
+    color:white;
+
+    animation:fadeIn .7s ease;
+
 }
 
-.login-card h1 {
-    text-align: center;
-    font-size: 28px;
-    color: #2E7D32;
-    margin-bottom: 15px;
-    line-height: 1.4;
+/* ===========================
+   TITLES
+=========================== */
+
+.login-card h1{
+
+    text-align:center;
+
+    color:#ffffff;
+
+    font-size:34px;
+
+    margin-bottom:10px;
+
+    font-weight:700;
+
 }
 
-.subtitle {
-    text-align: center;
-    color: #555;
-    margin-bottom: 30px;
+.project-title{
+
+    text-align:center;
+
+    color:#f3f3f3;
+
+    font-size:14px;
+
+    line-height:1.6;
+
+    margin-bottom:18px;
+
 }
 
-.form-group {
-    margin-bottom: 18px;
+.subtitle{
+
+    text-align:center;
+
+    color:#ffffff;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    margin-bottom:25px;
+
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #333;
+/* ===========================
+   FORM
+=========================== */
+
+.form-group{
+
+    margin-bottom:18px;
+
 }
 
-.form-group input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #bbb;
-    border-radius: 5px;
-    font-size: 15px;
+.form-group label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    color:#ffffff;
+
+    font-weight:600;
+
 }
 
-.form-group input:focus {
-    outline: none;
-    border-color: #2E7D32;
+.form-group input,
+.form-group select{
+
+    width:100%;
+
+    padding:13px 15px;
+
+    border-radius:12px;
+
+    border:1px solid rgba(255,255,255,.30);
+
+    background:rgba(255,255,255,.15);
+
+    color:#ffffff;
+
+    font-size:15px;
+
+    transition:.3s;
+
+    outline:none;
+
 }
 
-button {
-    width: 100%;
-    padding: 12px;
-    background: #2E7D32;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 10px;
+.form-group input::placeholder{
+
+    color:#dddddd;
+
 }
 
-button:hover {
-    background: #256428;
+.form-group input:focus,
+.form-group select:focus{
+
+    border-color:#7CFC7C;
+
+    background:rgba(255,255,255,.22);
+
 }
 
-.signup-text {
-    text-align: center;
-    margin-top: 20px;
-    color: #555;
+.form-group select option{
+
+    color:#000;
+
 }
 
-.signup-text a {
-    text-decoration: none;
-    color: #2E7D32;
-    font-weight: bold;
+/* ===========================
+   BUTTON
+=========================== */
+
+button{
+
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:40px;
+
+    background:linear-gradient(
+        135deg,
+        #2E7D32,
+        #4CAF50
+    );
+
+    color:white;
+
+    font-size:17px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
 }
 
-.signup-text a:hover {
-    text-decoration: underline;
+button:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 12px 25px rgba(76,175,80,.45);
+
+}
+
+/* ===========================
+   ERROR
+=========================== */
+
+.error-message{
+
+    color:#FFD6D6;
+
+    text-align:center;
+
+    font-weight:600;
+
+    margin-bottom:15px;
+
+}
+
+/* ===========================
+   LINKS
+=========================== */
+
+.signup-text{
+
+    text-align:center;
+
+    margin-top:25px;
+
+    color:white;
+
+    font-size:15px;
+
+}
+
+.signup-text a{
+
+    color:#A5D6A7;
+
+    text-decoration:none;
+
+    font-weight:700;
+
+    margin-left:6px;
+
+}
+
+.signup-text a:hover{
+
+    color:white;
+
+}
+
+/* ===========================
+   ANIMATION
+=========================== */
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+        transform:translateY(35px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateY(0);
+
+    }
+
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media(max-width:768px){
+
+    .login-card{
+
+        width:100%;
+        max-width:380px;
+        padding:28px;
+
+    }
+
+    .login-card h1{
+
+        font-size:28px;
+
+    }
+
+    .project-title{
+
+        font-size:13px;
+
+    }
+
+    .subtitle{
+
+        font-size:16px;
+
+    }
+
 }

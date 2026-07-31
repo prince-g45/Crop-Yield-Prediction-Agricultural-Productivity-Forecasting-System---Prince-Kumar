@@ -7,12 +7,11 @@ import "../styles/Login.css";
 function Login() {
   const navigate = useNavigate();
 
-  // State Variables
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("Farmer");
   const [error, setError] = useState("");
 
-  // Login Function
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -22,21 +21,55 @@ function Login() {
       const response = await api.post("/auth/login", {
         email,
         password,
+        role,
       });
 
-      // JWT Token Save
       localStorage.setItem(
         "access_token",
         response.data.access_token
       );
 
+      localStorage.setItem(
+        "role",
+        response.data.role
+      );
+
+      localStorage.setItem(
+        "full_name",
+        response.data.full_name
+      );
+
       alert("Login Successful!");
 
-      // Dashboard baad me banega
-      navigate("/");
+      switch (response.data.role) {
+        case "Farmer":
+          navigate("/farmer-dashboard");
+          break;
+
+        case "Agriculture Department":
+          navigate("/department-dashboard");
+          break;
+
+        case "Consultant":
+          navigate("/consultant-dashboard");
+          break;
+
+        case "Researcher":
+          navigate("/research-dashboard");
+          break;
+
+        case "Administrator":
+          navigate("/admin-dashboard");
+          break;
+
+        default:
+          navigate("/");
+      }
 
     } catch (err) {
-      setError("Invalid Email or Password");
+      setError(
+        err.response?.data?.detail || "Invalid Login Credentials"
+      );
     }
   };
 
@@ -45,20 +78,26 @@ function Login() {
       <Navbar />
 
       <div className="login-container">
+
         <div className="login-card">
 
-          <h1>
-            Crop Yield Prediction & Agricultural Productivity Forecasting System
-          </h1>
+          <h1>YieldSense AI</h1>
+
+          <p className="project-title">
+            AI-Powered Crop Yield Prediction &
+            Agricultural Productivity Forecasting
+          </p>
 
           <p className="subtitle">
-            Welcome to YieldSense AI
+            Sign in to continue
           </p>
 
           <form onSubmit={handleLogin}>
 
             <div className="form-group">
+
               <label>Email Address</label>
+
               <input
                 type="email"
                 placeholder="Enter your email"
@@ -66,10 +105,13 @@ function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
+
             </div>
 
             <div className="form-group">
+
               <label>Password</label>
+
               <input
                 type="password"
                 placeholder="Enter your password"
@@ -77,16 +119,40 @@ function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+
+            </div>
+
+            <div className="form-group">
+
+              <label>Login As</label>
+
+              <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                <option value="Farmer"> Farmer</option>
+
+                <option value="Agriculture Department">
+                  Agriculture Department
+                </option>
+
+                <option value="Consultant">
+                  Consultant
+                </option>
+
+                <option value="Researcher">
+                  Researcher
+                </option>
+
+                <option value="Administrator">
+                  ⚙ Administrator
+                </option>
+              </select>
+
             </div>
 
             {error && (
-              <p
-                style={{
-                  color: "red",
-                  marginBottom: "15px",
-                  fontWeight: "bold",
-                }}
-              >
+              <p className="error-message">
                 {error}
               </p>
             )}
@@ -99,10 +165,13 @@ function Login() {
 
           <p className="signup-text">
             Don't have an account?{" "}
-            <Link to="/signup">Sign Up</Link>
+            <Link to="/signup">
+              Sign Up
+            </Link>
           </p>
 
         </div>
+
       </div>
     </>
   );
