@@ -1,5 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from google.oauth2 import id_token
+from google.auth.transport import requests
+from app.schemas.google import (
+    GoogleLoginRequest,
+    GoogleSignupRequest,
+)
+
 
 from app.db.session import SessionLocal
 from app.models.user import User
@@ -22,6 +29,10 @@ def get_db():
         db.close()
 
 
+# ===========================
+# Normal Signup
+# ===========================
+
 @router.post("/signup", response_model=UserResponse)
 def signup(user_data: UserCreate, db: Session = Depends(get_db)):
 
@@ -38,11 +49,11 @@ def signup(user_data: UserCreate, db: Session = Depends(get_db)):
     hashed_password = hash_password(user_data.password)
 
     new_user = User(
-        full_name=user_data.full_name,
-        email=user_data.email,
-        hashed_password=hashed_password,
-        role=user_data.role
-    )
+    full_name=user_data.full_name,
+    email=user_data.email,
+    hashed_password=hashed_password,
+    role="Farmer"
+)
 
     db.add(new_user)
     db.commit()
@@ -50,6 +61,10 @@ def signup(user_data: UserCreate, db: Session = Depends(get_db)):
 
     return new_user
 
+
+# ===========================
+# Normal Login
+# ===========================
 
 @router.post("/login")
 def login(user_data: UserLogin, db: Session = Depends(get_db)):
@@ -73,11 +88,7 @@ def login(user_data: UserLogin, db: Session = Depends(get_db)):
             detail="Invalid Email or Password"
         )
 
-    if user.role.lower() != user_data.role.lower():
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid User Role"
-        )
+    
 
     access_token = create_access_token(
         data={"sub": user.email}
@@ -91,7 +102,185 @@ def login(user_data: UserLogin, db: Session = Depends(get_db)):
         "email": user.email
     }
 
+# ===========================
+# Save Google User
+# ===========================
+
+@router.post("/google/save")
+def save_google_user(
+    data: GoogleSignupRequest,
+    db: Session = Depends(get_db)
+):
+
+    existing_user = db.query(User).filter(
+        User.email == data.email
+    ).first()
+
+    if existing_user:
+
+        raise HTTPException(
+            status_code=400,
+            detail="Account already exists"
+        )
+
+    # Random password because Google users don't login using password
+    random_password = hash_password(data.google_id)
+
+    new_user = User(
+
+        full_name=data.full_name,
+
+        email=data.email,
+
+        hashed_password=random_password,
+
+        role="Farmer",
+
+    )
+
+    db.add(new_user)
+
+    db.commit()
+
+    db.refresh(new_user)
+
+    access_token = create_access_token(
+        data={"sub": new_user.email}
+    )
+
+    return {
+
+        "success": True,
+
+        "token": access_token,
+
+        "role": new_user.role,
+
+        "full_name": new_user.full_name,
+
+        "email": new_user.email
+
+    }
+
+# ===========================
+# Current User
+# ===========================
 
 @router.get("/me", response_model=UserResponse)
 def get_me(current_user: User = Depends(get_current_user)):
     return current_user
+
+# ===========================
+# Google Signup Check
+# ===========================
+
+@router.post("/google/signup")
+def google_signup(
+    data: GoogleLoginRequest,
+    db: Session = Depends(get_db)
+):
+
+    try:
+
+        # Verify Google Token
+        user_info = id_token.verify_oauth2_token(
+            data.credential,
+            requests.Request()
+        )
+
+        email = user_info.get("email")
+
+        # Check if email already exists
+        existing_user = db.query(User).filter(
+            User.email == email
+        ).first()
+
+        if existing_user:
+
+            return {
+
+                "exists": True,
+
+                "message": "Account already exists. Please login."
+
+            }
+
+        # New Google User
+        return {
+
+            "exists": False,
+
+            "name": user_info.get("name"),
+
+            "email": email,
+
+            "google_id": user_info.get("sub"),
+
+            "picture": user_info.get("picture")
+
+        }
+
+    except Exception:
+
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid Google Token"
+        )
+
+
+# ===========================
+# Google Login
+# ===========================
+
+@router.post("/google/login")
+def google_login(
+    data: GoogleLoginRequest,
+    db: Session = Depends(get_db)
+):
+
+    try:
+
+        # Verify Google Token
+        user_info = id_token.verify_oauth2_token(
+            data.credential,
+            requests.Request()
+        )
+
+        email = user_info.get("email")
+
+        # Find user in database
+        user = db.query(User).filter(
+            User.email == email
+        ).first()
+
+        if not user:
+
+            raise HTTPException(
+                status_code=404,
+                detail="Google account not registered. Please signup first."
+            )
+
+        access_token = create_access_token(
+            data={"sub": user.email}
+        )
+
+        return {
+
+            "success": True,
+
+            "token": access_token,
+
+            "role": user.role,
+
+            "full_name": user.full_name,
+
+            "email": user.email
+
+        }
+
+    except Exception:
+
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid Google Login"
+        )

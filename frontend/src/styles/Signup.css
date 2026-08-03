@@ -254,6 +254,55 @@ button:hover{
     color:white;
 }
 
+
+/* ===========================
+   Divider
+=========================== */
+
+.divider{
+
+    display:flex;
+    align-items:center;
+
+    margin:25px 0;
+
+}
+
+.divider::before,
+.divider::after{
+
+    content:"";
+
+    flex:1;
+
+    height:1px;
+
+    background:rgba(255,255,255,.3);
+
+}
+
+.divider span{
+
+    padding:0 15px;
+
+    color:white;
+
+    font-size:14px;
+
+}
+
+/* ===========================
+   Google Login
+=========================== */
+
+.google-login{
+
+    display:flex;
+    justify-content:center;
+
+    margin-bottom:20px;
+
+}
 /* ===========================
    ANIMATION
 =========================== */

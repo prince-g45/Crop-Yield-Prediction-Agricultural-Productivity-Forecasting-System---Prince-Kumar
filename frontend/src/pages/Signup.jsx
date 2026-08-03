@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
+
 import Navbar from "../components/Navbar";
 import api from "../services/api";
 import "../styles/Signup.css";
@@ -28,12 +30,12 @@ function Signup() {
     }
 
     try {
-        await api.post("/auth/signup", {
-            full_name: fullName,
-            email: email,
-            password: password,
-            role: role,
-        });
+      await api.post("/auth/signup", {
+        full_name: fullName,
+        email: email,
+        password: password,
+        role: role,
+      });
 
       setSuccess("Account created successfully!");
 
@@ -47,6 +49,54 @@ function Signup() {
       );
     }
   };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+
+  try {
+
+    const response = await api.post(
+      "/auth/google/signup",
+      {
+        credential: credentialResponse.credential,
+      }
+    );
+
+    // Existing User
+    if (response.data.exists) {
+
+      alert("Account already exists. Please Login.");
+
+      navigate("/");
+
+      return;
+    }
+
+    // New User
+    navigate("/choose-role", {
+
+      state: {
+
+        full_name: response.data.name,
+
+        email: response.data.email,
+
+        google_id: response.data.google_id,
+
+        picture: response.data.picture,
+
+      },
+
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("Google Signup Failed.");
+
+  }
+
+};
 
   return (
     <>
@@ -70,6 +120,7 @@ function Signup() {
           <form onSubmit={handleSignup}>
 
             <div className="form-group">
+
               <label>Full Name</label>
 
               <input
@@ -79,9 +130,11 @@ function Signup() {
                 onChange={(e) => setFullName(e.target.value)}
                 required
               />
+
             </div>
 
             <div className="form-group">
+
               <label>Email Address</label>
 
               <input
@@ -91,9 +144,11 @@ function Signup() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
+
             </div>
 
             <div className="form-group">
+
               <label>Password</label>
 
               <input
@@ -103,9 +158,11 @@ function Signup() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+
             </div>
 
             <div className="form-group">
+
               <label>Confirm Password</label>
 
               <input
@@ -115,6 +172,7 @@ function Signup() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
+
             </div>
 
             <div className="form-group">
@@ -125,23 +183,15 @@ function Signup() {
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
               >
-                <option value="Farmer">Farmer</option>
+
+                <option value="Farmer">
+                  Farmer
+                </option>
 
                 <option value="Agriculture Department">
                   Agriculture Department
                 </option>
 
-                <option value="Consultant">
-                  Consultant
-                </option>
-
-                <option value="Researcher">
-                  Researcher
-                </option>
-
-                <option value="Administrator">
-                  ⚙ Administrator
-                </option>
               </select>
 
             </div>
@@ -171,16 +221,38 @@ function Signup() {
 
           </form>
 
+          <div className="divider">
+
+            <span>OR</span>
+
+          </div>
+
+          <div className="google-login">
+
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => {
+                alert("Google Login Failed");
+              }}
+              text="signup_with"
+            />
+
+          </div>
+
           <p className="login-text">
-            Already have an account?{" "}
+
+            Already have an account?
+
             <Link to="/">
               Login
             </Link>
+
           </p>
 
         </div>
 
       </div>
+
     </>
   );
 }

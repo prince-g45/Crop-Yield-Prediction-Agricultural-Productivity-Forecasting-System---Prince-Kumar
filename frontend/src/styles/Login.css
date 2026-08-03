@@ -324,3 +324,38 @@ button:hover{
     }
 
 }
+
+    /* ===========================
+   Divider
+=========================== */
+
+.divider{
+    display:flex;
+    align-items:center;
+    margin:25px 0;
+}
+
+.divider::before,
+.divider::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:#ddd;
+}
+
+.divider span{
+    padding:0 15px;
+    color:#777;
+    font-size:14px;
+}
+
+/* ===========================
+   Google Login
+=========================== */
+
+.google-login{
+    display:flex;
+    justify-content:center;
+    margin-bottom:20px;
+}
+

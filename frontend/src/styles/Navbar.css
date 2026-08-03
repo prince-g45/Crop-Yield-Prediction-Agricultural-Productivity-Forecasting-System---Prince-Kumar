@@ -1,179 +1,304 @@
 /* ===========================
+   GLOBAL
+=========================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ===========================
+   WEATHER
+=========================== */
+
+.weather-box{
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    background:#f4f8f4;
+
+    padding:8px 14px;
+
+    border-radius:10px;
+
+    color:#2E7D32;
+
+    font-weight:600;
+}
+
+.weather-box small{
+    color:#666;
+}
+
+/* ===========================
+   PROFILE
+=========================== */
+
+.profile-link{
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    text-decoration:none;
+
+    color:#333;
+
+    padding:10px 14px;
+
+    border-radius:8px;
+
+    transition:.3s;
+}
+
+.profile-link:hover{
+    background:#f2f2f2;
+    color:#2E7D32;
+}
+
+/* ===========================
+   LOGOUT
+=========================== */
+
+.logout-btn{
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    background:#e53935;
+
+    color:white;
+
+    border:none;
+
+    padding:10px 18px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.logout-btn:hover{
+
+    background:#c62828;
+
+}
+
+.weather-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    background: #F4F8F4;
+    padding: 8px 14px;
+    border-radius: 10px;
+}
+
+.weather-icon {
+    width: 36px;
+    height: 36px;
+}
+
+.weather-box span {
+    display: block;
+    font-weight: 700;
+    color: #2E7D32;
+    font-size: 16px;
+}
+
+.weather-box small {
+    color: #666;
+    font-size: 13px;
+}
+
+/* ===========================
    NAVBAR
 =========================== */
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
 
-.navbar{
+    width: 100%;
+    height: 80px;
 
-    position:fixed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-    top:0;
-    left:0;
+    padding: 0 40px;
 
-    width:100%;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 
-    height:72px;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    padding:0 60px;
-
-    background:rgba(18,38,18,.18);
-
-    backdrop-filter:blur(18px);
-
-    -webkit-backdrop-filter:blur(18px);
-
-    border-bottom:1px solid rgba(255,255,255,.15);
-
-    z-index:999;
-
+    z-index: 1000;
 }
 
 /* ===========================
    LOGO
 =========================== */
 
-.logo{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
 }
 
-.logo img{
-
-    width:48px;
-
-    height:48px;
-
-    object-fit:contain;
-
+.logo img {
+    width: 55px;
+    height: 55px;
 }
 
-.logo h2{
+.logo-text {
+    display: flex;
+    flex-direction: column;
+}
 
-    color:white;
+.logo-text h2 {
+    color: #2E7D32;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+}
 
-    font-size:26px;
+.logo-text p {
+    color: #777;
+    font-size: 14px;
+    margin-top: 3px;
+}
 
-    font-weight:700;
+/* If you still use h2 directly */
 
-    letter-spacing:.5px;
-
+.logo h2 {
+    color: #2E7D32;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.25;
 }
 
 /* ===========================
-   MENU
+   NAVIGATION
 =========================== */
 
-.nav-links{
-
-    display:flex;
-
-    align-items:center;
-
-    list-style:none;
-
-    gap:18px;
-
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    list-style: none;
 }
 
-.nav-links a{
-
-    text-decoration:none;
-
-    color:white;
-
-    font-size:15px;
-
-    font-weight:500;
-
-    transition:.3s;
-
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-size: 15px;
+    font-weight: 500;
+    transition: 0.3s;
 }
 
-/* About */
-
-.nav-links li:first-child a{
-
-    padding:10px 15px;
-
-}
-
-.nav-links li:first-child a:hover{
-
-    color:#B9F6CA;
-
+.nav-links a:hover {
+    color: #2E7D32;
 }
 
 /* ===========================
    LOGIN
 =========================== */
 
-.login-btn{
-
-    padding:10px 22px;
-
-    border-radius:30px;
-
-    border:1px solid rgba(255,255,255,.45);
-
-    transition:.3s;
-
+.login-btn {
+    padding: 10px 22px;
+    border: 1px solid #2E7D32;
+    border-radius: 30px;
+    color: #2E7D32 !important;
+    transition: .3s;
 }
 
-.login-btn:hover{
-
-    background:rgba(255,255,255,.15);
-
-    color:white;
-
+.login-btn:hover {
+    background: #2E7D32;
+    color: white !important;
 }
 
 /* ===========================
    SIGNUP
 =========================== */
 
-.signup-btn{
-
-    padding:10px 24px;
-
-    border-radius:30px;
-
-    background:linear-gradient(
-        135deg,
-        #2E7D32,
-        #4CAF50
-    );
-
-    color:white !important;
-
-    box-shadow:0 8px 22px rgba(46,125,50,.35);
-
+.signup-btn {
+    padding: 10px 24px;
+    border-radius: 30px;
+    background: #2E7D32;
+    color: white !important;
+    transition: .3s;
 }
 
-.signup-btn:hover{
+.signup-btn:hover {
+    background: #1B5E20;
+}
 
-    transform:translateY(-2px);
+/* ===========================
+   PROFILE
+=========================== */
 
-    background:linear-gradient(
-        135deg,
-        #388E3C,
-        #66BB6A
-    );
+.profile-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 10px 16px;
+
+    border-radius: 8px;
+
+    color: #333 !important;
+
+    font-weight: 600;
+
+    transition: .3s;
+}
+
+.profile-link:hover {
+    background: #f4f4f4;
+    color: #2E7D32 !important;
+}
+
+/* ===========================
+   LOGOUT
+=========================== */
+
+.logout-btn {
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 10px 18px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #E53935;
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .3s;
+}
+
+.logout-btn:hover {
+
+    background: #C62828;
 
 }
 
@@ -181,42 +306,116 @@
    MOBILE
 =========================== */
 
-@media(max-width:768px){
+@media (max-width:768px){
 
 .navbar{
 
-padding:0 20px;
-
-height:65px;
+    padding:0 20px;
+    height:70px;
 
 }
 
 .logo img{
 
-width:40px;
-
-height:40px;
+    width:42px;
+    height:42px;
 
 }
 
 .logo h2{
 
-font-size:20px;
+    font-size:18px;
 
 }
 
 .nav-links{
 
-gap:10px;
+    gap:10px;
 
 }
 
 .login-btn,
-.signup-btn{
+.signup-btn,
+.logout-btn{
 
-padding:8px 16px;
+    padding:8px 14px;
+    font-size:13px;
 
-font-size:14px;
+}
+
+.profile-link{
+
+    padding:8px 10px;
+
+}
+
+/* ===========================
+   ADMIN NAVIGATION
+=========================== */
+
+.nav-btn{
+
+    background:none;
+
+    border:none;
+
+    cursor:pointer;
+
+    padding:10px 16px;
+
+    border-radius:8px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    color:#444;
+
+    transition:.3s;
+
+}
+
+.nav-btn:hover{
+
+    background:#E8F5E9;
+
+    color:#2E7D32;
+
+}
+
+.nav-btn.active{
+
+    background:#2E7D32;
+
+    color:#fff;
+
+}
+
+/* ===========================
+   ADMIN USER
+=========================== */
+
+.admin-user{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:10px 14px;
+
+    border-radius:8px;
+
+    font-weight:600;
+
+    color:#333;
+
+}
+
+.admin-user svg{
+
+    color:#2E7D32;
 
 }
 
