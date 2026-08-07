@@ -42,9 +42,32 @@ class Prediction(Base):
 
     estimated_production = Column(Float, nullable=False)
 
+    # =====================================
+    # Soil Analysis
+    # =====================================
+
+    N = Column(Float, nullable=False)
+
+    P = Column(Float, nullable=False)
+
+    K = Column(Float, nullable=False)
+
+    pH = Column(Float, nullable=False)
+
+    soil_health = Column(String, nullable=False)
+
+    recommended_crop = Column(String, nullable=False)
+
+    recommendation = Column(String, nullable=False)
+
+    # =====================================
+
     created_at = Column(
         DateTime(timezone=True),
         server_default=func.now()
     )
 
-    user = relationship("User", back_populates="predictions")
+    user = relationship(
+        "User",
+        back_populates="predictions"
+    )

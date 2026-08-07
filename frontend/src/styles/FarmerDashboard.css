@@ -1,6 +1,6 @@
-/* ==========================
-   Global
-========================== */
+/* ==========================================
+   GLOBAL
+========================================== */
 
 *{
     margin:0;
@@ -13,185 +13,292 @@ body{
     background:#f5f7f5;
 }
 
-/* ==========================
-   Dashboard
-========================== */
+/* ==========================================
+   DASHBOARD
+========================================== */
 
 .dashboard-container{
-
-    max-width:1100px;
-
+    max-width:1400px;
     margin:90px auto 40px;
-
     padding:0 20px;
-
 }
 
 .dashboard-header{
-
     margin-bottom:25px;
-
 }
 
 .dashboard-header h1{
-
     color:#2E7D32;
-
-    font-size:30px;
-
-    margin-bottom:6px;
-
+    font-size:38px;
+    font-weight:700;
+    margin-bottom:8px;
 }
 
 .dashboard-header p{
-
     color:#666;
-
-    font-size:15px;
-
+    font-size:16px;
 }
 
-/* ==========================
-   Cards
-========================== */
+/* ==========================================
+   MAIN LAYOUT
+========================================== */
+
+.prediction-section{
+    display:flex;
+    gap:25px;
+    align-items:flex-start;
+    margin-bottom:25px;
+}
+
+.prediction-left{
+    flex:1.7;
+}
+
+.prediction-right{
+    width:320px;
+    flex-shrink:0;
+}
+
+.summary-section{
+    margin-bottom:25px;
+}
+
+/* ==========================================
+   COMMON CARDS
+========================================== */
 
 .weather-card,
 .prediction-card,
-.result-card,
+.summary-card,
 .history-card{
-
-    background:white;
-
+    background:#fff;
     border:1px solid #e5e7eb;
-
-    border-radius:10px;
-
-    padding:22px;
-
-    margin-bottom:22px;
-
+    border-radius:14px;
+    padding:24px;
+    box-shadow:0 4px 12px rgba(0,0,0,.06);
 }
 
-.weather-card h2,
 .prediction-card h2,
-.result-card h2,
+.summary-card h2,
 .history-card h2{
-
     color:#2E7D32;
-
-    margin-bottom:18px;
-
+    font-size:24px;
+    margin-bottom:20px;
 }
 
-/* ==========================
-   Weather
-========================== */
+/* ==========================================
+   WEATHER
+========================================== */
 
 .weather-grid{
-
     display:grid;
-
     grid-template-columns:repeat(4,1fr);
-
     gap:18px;
-
 }
 
 .weather-grid div{
-
     background:#fafafa;
-
     border:1px solid #ececec;
-
-    border-radius:8px;
-
+    border-radius:10px;
     padding:15px;
-
 }
 
 .weather-grid h4{
-
-    color:#666;
-
-    margin-bottom:8px;
-
     font-size:14px;
-
+    color:#666;
+    margin-bottom:8px;
 }
 
 .weather-grid p{
-
     font-size:18px;
-
     font-weight:600;
-
 }
 
-/* ==========================
-   Prediction Form
-========================== */
+/* ==========================================
+   FORM
+========================================== */
 
 .prediction-form{
-
     display:grid;
-
     grid-template-columns:repeat(2,1fr);
-
     gap:20px;
-
 }
 
 .form-group{
-
     display:flex;
-
     flex-direction:column;
-
 }
 
 .form-group label{
-
     margin-bottom:8px;
-
+    font-size:14px;
     font-weight:600;
-
     color:#444;
-
 }
 
 .form-group input,
 .form-group select{
-
-    padding:11px 12px;
-
+    width:100%;
+    height:48px;
+    padding:0 14px;
     border:1px solid #d1d5db;
-
     border-radius:8px;
-
-    outline:none;
-
+    background:#fff;
     font-size:15px;
-
+    transition:.3s;
 }
 
 .form-group input:focus,
 .form-group select:focus{
-
+    outline:none;
     border-color:#2E7D32;
-
+    box-shadow:0 0 0 3px rgba(46,125,50,.15);
 }
 
 .predict-btn{
-
-    grid-column:1/3;
+    grid-column:span 2;
+    justify-self:center;
 
     width:220px;
+    height:48px;
 
-    padding:12px;
-
-    margin-top:10px;
+    border:none;
+    border-radius:8px;
 
     background:#2E7D32;
+    color:#fff;
+
+    font-size:16px;
+    font-weight:600;
+
+    cursor:pointer;
+    transition:.3s;
+}
+
+.predict-btn:hover:not(:disabled){
+    background:#1B5E20;
+    transform:translateY(-2px);
+}
+
+.predict-btn:disabled{
+    background:#94a3b8;
+    cursor:not-allowed;
+}
+
+
+
+
+/* ==========================================
+   HERO CARD
+========================================== */
+
+.production-card{
+    height:320px;
+
+    border-radius:16px;
+
+    background:linear-gradient(135deg,#43a047,#2E7D32);
+
+    color:#fff;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+
+    box-shadow:0 8px 18px rgba(46,125,50,.25);
+}
+
+.production-card h2{
+    color:#fff;
+    font-size:24px;
+    margin-bottom:15px;
+}
+
+.production-value{
+    font-size:52px;
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+.production-card p{
+    font-size:20px;
+    margin-bottom:15px;
+}
+
+.production-card span{
+    background:rgba(255,255,255,.18);
+    padding:8px 20px;
+    border-radius:30px;
+    font-size:14px;
+}
+
+/* ==========================================
+   NEW PREDICTION BUTTON
+========================================== */
+
+.new-prediction-btn{
+
+    width:100%;
+
+    margin-top:18px;
+
+    padding:14px 18px;
+
+    background:#ffffff;
+
+    color:#2E7D32;
+
+    border:2px solid #2E7D32;
+
+    border-radius:10px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:all .3s ease;
+
+}
+
+.new-prediction-btn:hover{
+
+    background:#2E7D32;
+
+    color:#ffffff;
+
+    transform:translateY(-2px);
+
+    box-shadow:0 6px 15px rgba(46,125,50,.25);
+
+}
+
+.new-prediction-btn:active{
+
+    transform:scale(.98);
+
+}
+
+.new-prediction-btn:focus{
+
+    outline:none;
+
+    box-shadow:0 0 0 4px rgba(46,125,50,.18);
+
+}
+
+
+/* ==========================================
+   DELETE BUTTON
+========================================== */
+
+.delete-btn{
+
+    background:#e87676;
 
     color:white;
 
@@ -199,166 +306,192 @@ body{
 
     border-radius:8px;
 
+    padding:8px 14px;
+
     cursor:pointer;
 
-    font-size:15px;
+    font-size:14px;
 
     font-weight:600;
 
-}
-
-.predict-btn:hover{
-
-    background:#1b5e20;
+    transition:.3s;
 
 }
 
-/* ==========================
-   Prediction Result
-========================== */
+.delete-btn:hover{
 
-.result-grid{
+    background:#b91c1c;
 
+    transform:translateY(-2px);
+
+}
+
+/* ==========================================
+   SUMMARY
+========================================== */
+
+.summary-grid{
     display:grid;
-
     grid-template-columns:repeat(2,1fr);
-
-    gap:20px;
-
+    gap:16px;
 }
 
-.result-item{
-
+.summary-row{
     background:#fafafa;
-
     border:1px solid #ececec;
-
-    border-radius:8px;
-
-    padding:15px;
-
+    border-radius:10px;
+    padding:16px;
 }
 
-.result-item label{
-
-    color:#666;
-
+.summary-row span{
     display:block;
-
-    margin-bottom:8px;
-
+    color:#666;
+    font-size:13px;
+    margin-bottom:6px;
 }
 
-.result-item h3{
-
+.summary-row strong{
     color:#2E7D32;
+    font-size:18px;
+}
 
-    font-size:22px;
-
+.full-width{
+    grid-column:1/-1;
 }
 
 .no-result{
-
     text-align:center;
-
+    padding:50px 20px;
     color:#777;
-
-    padding:30px;
-
 }
 
-/* ==========================
-   History Table
-========================== */
+/* ==========================================
+   HISTORY
+========================================== */
+
+.history-card{
+    margin-top:25px;
+}
+
+.history-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-bottom:20px;
+}
+
+.history-header h2{
+    color:#2E7D32;
+}
+
+.history-header p{
+    color:#6b7280;
+    font-size:14px;
+}
+
+.table-container{
+    overflow-x:auto;
+}
 
 .history-table{
-
     width:100%;
-
     border-collapse:collapse;
+}
 
+.history-table thead{
+    background:#F3F8F3;
 }
 
 .history-table th{
-
+    padding:16px;
     text-align:left;
-
-    background:#f7f7f7;
-
-    padding:14px;
-
-    color:#555;
-
+    color:#2E7D32;
+    border-bottom:2px solid #E5E7EB;
 }
 
 .history-table td{
+    padding:16px;
+    border-bottom:1px solid #ECECEC;
+    color:#374151;
+}
 
-    padding:14px;
-
-    border-top:1px solid #eee;
-
+.history-table tbody tr{
+    transition:.25s;
 }
 
 .history-table tbody tr:hover{
-
-    background:#fafafa;
-
+    background:#F8FAF8;
 }
 
 .empty-history{
-
     text-align:center;
+    padding:60px 20px;
+}
 
-    color:#888;
+.empty-history h3{
+    color:#2E7D32;
+    margin-bottom:10px;
+}
 
-    padding:30px;
+.empty-history p{
+    color:#6B7280;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width:1100px){
+
+    .prediction-section{
+        flex-direction:column;
+    }
+
+    .prediction-left,
+    .prediction-right{
+        width:100%;
+    }
+
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .weather-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 
 }
 
-/* ==========================
-   Responsive
-========================== */
+@media (max-width:768px){
 
-@media(max-width:768px){
+    .dashboard-container{
+        margin-top:80px;
+    }
 
-.dashboard-container{
+    .prediction-form{
+        grid-template-columns:1fr;
+    }
 
-    margin-top:80px;
+    .predict-btn{
+        grid-column:span 1;
+        width:100%;
+    }
 
-}
+    .summary-grid{
+        grid-template-columns:1fr;
+    }
 
-.weather-grid{
+    .weather-grid{
+        grid-template-columns:1fr;
+    }
 
-    grid-template-columns:1fr 1fr;
+    .history-table{
+        display:block;
+        overflow-x:auto;
+    }
 
-}
-
-.prediction-form{
-
-    grid-template-columns:1fr;
-
-}
-
-.predict-btn{
-
-    grid-column:auto;
-
-    width:100%;
-
-}
-
-.result-grid{
-
-    grid-template-columns:1fr;
-
-}
-
-.history-table{
-
-    display:block;
-
-    overflow-x:auto;
-
-}
+    .production-card{
+        height:260px;
+    }
 
 }

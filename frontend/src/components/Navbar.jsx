@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
+
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { User, LogOut } from "lucide-react";
 import "../styles/Navbar.css";
 import logo from "../assets/logo.png";
-import { getWeatherByCoordinates } from "../services/weatherService";
 
+import WeatherDropdown from "./WeatherDropdown";
 function Navbar({
 
   activeSection,
@@ -23,17 +24,7 @@ function Navbar({
 
   const [userName, setUserName] = useState("");
 
-  const [weather, setWeather] = useState({
-
-    temp: "--",
-
-    city: "Loading...",
-
-    condition: "",
-
-    icon: "",
-
-  });
+  
 
   useEffect(() => {
 
@@ -47,53 +38,7 @@ function Navbar({
 
   }, []);
 
-  // Weather only for Farmer
-
-  useEffect(() => {
-
-    if (!isDashboard || role !== "Farmer") return;
-
-    if (!navigator.geolocation) return;
-
-    navigator.geolocation.getCurrentPosition(
-
-      async (position) => {
-
-        try {
-
-          const { latitude, longitude } = position.coords;
-
-          const data = await getWeatherByCoordinates(
-
-            latitude,
-
-            longitude
-
-          );
-
-          setWeather({
-
-            temp: Math.round(data.current.temp_c),
-
-            city: data.location.name,
-
-            condition: data.current.condition.text,
-
-            icon: data.current.condition.icon,
-
-          });
-
-        } catch (error) {
-
-          console.error(error);
-
-        }
-
-      }
-
-    );
-
-  }, [isDashboard, role]);
+  
 
   const handleLogout = () => {
 
@@ -215,6 +160,8 @@ function Navbar({
 
               </li>
 
+              
+
               <li>
 
                 <button
@@ -307,69 +254,28 @@ function Navbar({
 
             <>
 
-              <li className="weather-box">
+  <li>
+    <WeatherDropdown />
+  </li>
+  
 
-                {weather.icon && (
+  <li>
+    <Link className="profile-link" to="#">
+      <User size={18} />
+      {userName}
+    </Link>
+  </li>
 
-                  <img
-
-                    src={`https:${weather.icon}`}
-
-                    alt={weather.condition}
-
-                    className="weather-icon"
-
-                  />
-
-                )}
-
-                <div>
-
-                  <span>{weather.temp}°C</span>
-
-                  <small>{weather.city}</small>
-
-                </div>
-
-              </li>
-
-              <li>
-
-                <Link
-
-                  className="profile-link"
-
-                  to="#"
-
-                >
-
-                  <User size={18} />
-
-                  {userName}
-
-                </Link>
-
-              </li>
-
-              <li>
-
-                <button
-
-                  className="logout-btn"
-
-                  onClick={handleLogout}
-
-                >
-
-                  <LogOut size={18} />
-
-                  Log Out
-
-                </button>
-
-              </li>
-
-            </>
+  <li>
+    <button
+      className="logout-btn"
+      onClick={handleLogout}
+    >
+      <LogOut size={18} />
+      Log Out
+    </button>
+  </li>
+</>
 
           )
 

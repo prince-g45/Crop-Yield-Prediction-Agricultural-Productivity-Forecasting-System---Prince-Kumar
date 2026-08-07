@@ -1,49 +1,165 @@
-import { useState } from "react";
-import { predictYield } from "../services/predictionService";
+import "../styles/PredictionForm.css";
 
-function PredictionForm({ setPredictionResult }) {
+import { useEffect, useState } from "react";
+import {
+  predictYield,
+  getPredictionMetadata,
+} from "../services/predictionService";
 
-  const [formData, setFormData] = useState({
+function PredictionForm({
+  setPredictionResult,
+  resetForm,
+  setResetForm,
+  setRefreshHistory,
+}) {
+
+  // ===========================
+  // Initial Form Data
+  // ===========================
+
+  const initialFormData = {
     farm_name: "",
-    state: "",
     crop: "",
     season: "",
     area: "",
     fertilizer: "",
     pesticide: "",
-  });
+  };
 
+  const [formData, setFormData] = useState(initialFormData);
+
+  const [crops, setCrops] = useState([]);
+  const [seasons, setSeasons] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // ===========================
+  // Load Metadata
+  // ===========================
+
+  useEffect(() => {
+
+    const loadMetadata = async () => {
+
+      try {
+
+        const data = await getPredictionMetadata();
+
+        setCrops(data.crops);
+        setSeasons(data.seasons);
+
+      } catch (error) {
+
+        console.error(error);
+
+        alert("Unable to load crops and seasons.");
+
+      }
+
+    };
+
+    loadMetadata();
+
+  }, []);
+
+  // ===========================
+  // Reset Form
+  // ===========================
+
+  useEffect(() => {
+
+    if (resetForm) {
+
+      setFormData(initialFormData);
+
+      setResetForm(false);
+
+    }
+
+  }, [resetForm, setResetForm]);
+
+  // ===========================
+  // Handle Change
+  // ===========================
+
   const handleChange = (e) => {
+
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+
   };
 
+  // ===========================
+  // Predict
+  // ===========================
+
   const handlePredict = async (e) => {
+
     e.preventDefault();
 
     setLoading(true);
 
-    try {
+    if (!navigator.geolocation) {
 
-      const result = await predictYield(formData);
-
-      setPredictionResult(result);
-
-    } catch (error) {
-
-      console.error(error);
-
-      alert("Prediction failed. Please try again.");
-
-    } finally {
+      alert("Geolocation is not supported.");
 
       setLoading(false);
 
+      return;
+
     }
+
+    navigator.geolocation.getCurrentPosition(
+
+      async (position) => {
+
+        try {
+
+          const payload = {
+
+            ...formData,
+
+            latitude: position.coords.latitude,
+
+            longitude: position.coords.longitude,
+
+          };
+
+          const result = await predictYield(payload);
+
+          // Update Hero Card + Summary
+          setPredictionResult(result);
+
+          // Refresh History Table
+          if (setRefreshHistory) {
+            setRefreshHistory(true);
+          }
+
+        } catch (error) {
+
+          console.error(error);
+
+          alert("Prediction failed.");
+
+        } finally {
+
+          setLoading(false);
+
+        }
+
+      },
+
+      () => {
+
+        alert("Please allow location access.");
+
+        setLoading(false);
+
+      }
+
+    );
+
   };
 
   return (
@@ -56,8 +172,6 @@ function PredictionForm({ setPredictionResult }) {
         className="prediction-form"
         onSubmit={handlePredict}
       >
-
-        {/* Farm Name */}
 
         <div className="form-group">
 
@@ -74,38 +188,6 @@ function PredictionForm({ setPredictionResult }) {
 
         </div>
 
-        {/* State */}
-
-        <div className="form-group">
-
-          <label>State</label>
-
-          <select
-            name="state"
-            value={formData.state}
-            onChange={handleChange}
-            required
-          >
-
-            <option value="">Select State</option>
-
-            <option>Bihar</option>
-            <option>Punjab</option>
-            <option>Haryana</option>
-            <option>Uttar Pradesh</option>
-            <option>Maharashtra</option>
-            <option>Madhya Pradesh</option>
-            <option>Rajasthan</option>
-            <option>West Bengal</option>
-            <option>Odisha</option>
-            <option>Tamil Nadu</option>
-
-          </select>
-
-        </div>
-
-        {/* Crop */}
-
         <div className="form-group">
 
           <label>Crop</label>
@@ -119,20 +201,20 @@ function PredictionForm({ setPredictionResult }) {
 
             <option value="">Select Crop</option>
 
-            <option>Rice</option>
-            <option>Wheat</option>
-            <option>Maize</option>
-            <option>Cotton</option>
-            <option>Sugarcane</option>
-            <option>Barley</option>
-            <option>Millets</option>
-            <option>Pulses</option>
+            {crops.map((crop) => (
+
+              <option
+                key={crop}
+                value={crop}
+              >
+                {crop}
+              </option>
+
+            ))}
 
           </select>
 
         </div>
-
-        {/* Season */}
 
         <div className="form-group">
 
@@ -147,27 +229,30 @@ function PredictionForm({ setPredictionResult }) {
 
             <option value="">Select Season</option>
 
-            <option>Kharif</option>
-            <option>Rabi</option>
-            <option>Summer</option>
-            <option>Winter</option>
-            <option>Whole Year</option>
-            <option>Autumn</option>
+            {seasons.map((season) => (
+
+              <option
+                key={season}
+                value={season}
+              >
+                {season}
+              </option>
+
+            ))}
 
           </select>
 
         </div>
 
-        {/* Area */}
-
         <div className="form-group">
 
-          <label>Area (Hectares)</label>
+          <label>Area (ha)</label>
 
           <input
             type="number"
             name="area"
-            placeholder="Enter Area"
+            step="0.01"
+            placeholder="e.g. 12.5"
             value={formData.area}
             onChange={handleChange}
             required
@@ -175,16 +260,15 @@ function PredictionForm({ setPredictionResult }) {
 
         </div>
 
-        {/* Fertilizer */}
-
         <div className="form-group">
 
-          <label>Fertilizer Used (kg)</label>
+          <label>Fertilizer (kg)</label>
 
           <input
             type="number"
             name="fertilizer"
-            placeholder="Enter Fertilizer Quantity"
+            step="0.01"
+            placeholder="e.g. 250"
             value={formData.fertilizer}
             onChange={handleChange}
             required
@@ -192,16 +276,15 @@ function PredictionForm({ setPredictionResult }) {
 
         </div>
 
-        {/* Pesticide */}
-
         <div className="form-group">
 
-          <label>Pesticide Used (kg)</label>
+          <label>Pesticide (kg)</label>
 
           <input
             type="number"
             name="pesticide"
-            placeholder="Enter Pesticide Quantity"
+            step="0.01"
+            placeholder="e.g. 18"
             value={formData.pesticide}
             onChange={handleChange}
             required
@@ -222,6 +305,7 @@ function PredictionForm({ setPredictionResult }) {
     </div>
 
   );
+
 }
 
 export default PredictionForm;

@@ -1,63 +1,131 @@
 import { useState } from "react";
 
-import Navbar from "../components/Navbar";
 
-import WeatherCard from "../components/WeatherCard";
+import Navbar from "../components/Navbar";
 import PredictionForm from "../components/PredictionForm";
 import PredictionResult from "../components/PredictionResult";
+import SoilAnalysis from "../components/SoilAnalysis";
 import RecentPredictions from "../components/RecentPredictions";
 
 import "../styles/FarmerDashboard.css";
 
 function FarmerDashboard() {
 
-  // Prediction Result State
+  // ===========================
+  // States
+  // ===========================
+
   const [predictionResult, setPredictionResult] = useState(null);
 
+  const [resetForm, setResetForm] = useState(false);
+
+  const [refreshHistory, setRefreshHistory] = useState(false);
+
+  // ===========================
+  // New Prediction
+  // ===========================
+
+  const handleNewPrediction = () => {
+
+    setPredictionResult(null);
+
+    setResetForm(true);
+
+  };
+
   return (
+
     <>
+
       <Navbar />
 
       <div className="dashboard-container">
 
-        {/* Header */}
+        {/* ===========================
+            Header
+        =========================== */}
 
         <div className="dashboard-header">
 
           <h1>
-Hello, {localStorage.getItem("full_name")} 
-</h1>
+            Hello, {localStorage.getItem("full_name")}
+          </h1>
 
-<p>
-Welcome back! Predict your crop yield using YieldSense AI.
-</p>
+          <p>
+            Welcome back! Predict your crop yield using YieldSense AI.
+          </p>
 
         </div>
 
-        {/* Current Weather */}
+        {/* ===========================
+            Form + Hero Card
+        =========================== */}
 
-        <WeatherCard />
+        <div className="prediction-section">
 
-        {/* Prediction Form */}
+          <div className="prediction-left">
 
-        <PredictionForm
-          setPredictionResult={setPredictionResult}
-        />
+            <PredictionForm
+              setPredictionResult={setPredictionResult}
+              resetForm={resetForm}
+              setResetForm={setResetForm}
+              setRefreshHistory={setRefreshHistory}
+            />
 
-        {/* Prediction Result */}
+          </div>
 
-        <PredictionResult
-          result={predictionResult}
-        />
+          <div className="prediction-right">
 
-        {/* Recent Predictions */}
+            <PredictionResult
+              result={predictionResult}
+              variant="hero"
+              onNewPrediction={handleNewPrediction}
+            />
 
-        <RecentPredictions />
+          </div>
+
+        </div>
+
+        {/* ===========================
+    Prediction Summary
+=========================== */}
+
+<div className="summary-section">
+
+  <PredictionResult
+    result={predictionResult}
+    variant="summary"
+  />
+
+</div>
+
+{/* ===========================
+    Soil Analysis
+=========================== */}
+
+<div className="soil-section">
+
+  <SoilAnalysis
+    result={predictionResult}
+  />
+
+</div>
+
+{/* ===========================
+    Recent Predictions
+=========================== */}
+
+<RecentPredictions
+  refreshHistory={refreshHistory}
+  setRefreshHistory={setRefreshHistory}
+/>
 
       </div>
 
     </>
+
   );
+
 }
 
 export default FarmerDashboard;

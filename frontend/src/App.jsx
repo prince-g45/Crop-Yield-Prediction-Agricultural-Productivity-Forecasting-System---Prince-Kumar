@@ -5,6 +5,7 @@ import Signup from "./pages/Signup";
 import About from "./pages/About";
 import ChooseRole from "./pages/ChooseRole";
 
+
 import FarmerDashboard from "./pages/FarmerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 
@@ -27,10 +28,19 @@ function App() {
 
         <Route path="/about" element={<About />} />
 
-        <Route
-          path="/choose-role"
-          element={<ChooseRole />}
-        />
+        
+        <Route path="/choose-role" element={<ChooseRole />} />
+
+        {/* Administrator */}
+
+<Route
+  path="/admin-dashboard"
+  element={
+    <ProtectedAdminRoute>
+      <AdminDashboard />
+    </ProtectedAdminRoute>
+  }
+/>
 
         {/* Farmer */}
 
@@ -43,7 +53,7 @@ function App() {
           }
         />
 
-        {/* Consultant */}
+      
 
         
 

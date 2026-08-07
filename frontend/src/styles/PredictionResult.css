@@ -1,0 +1,218 @@
+/* ==========================
+   Result Card
+========================== */
+
+.result-card{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    height:100%;
+}
+
+/* ==========================
+   Production Card
+========================== */
+
+.production-card{
+
+    background:linear-gradient(135deg,#2E7D32,#43A047);
+
+    color:white;
+
+    border-radius:16px;
+
+    padding:30px 25px;
+
+    text-align:center;
+
+    box-shadow:0 8px 20px rgba(46,125,50,.25);
+
+}
+
+.empty-production{
+
+    background:#dfeee0;
+
+    color:#2E7D32;
+
+    box-shadow:none;
+
+}
+
+.production-card h2{
+
+    font-size:20px;
+
+    font-weight:600;
+
+    margin-bottom:25px;
+
+}
+
+.production-value{
+
+    font-size:54px;
+
+    font-weight:700;
+
+    line-height:1;
+
+}
+
+.production-card p{
+
+    margin-top:10px;
+
+    font-size:18px;
+
+    opacity:.95;
+
+}
+
+.production-card span{
+
+    display:inline-block;
+
+    margin-top:20px;
+
+    padding:8px 16px;
+
+    border-radius:30px;
+
+    background:rgba(255,255,255,.18);
+
+    font-size:14px;
+
+}
+
+/* ==========================
+   Summary Card
+========================== */
+
+.summary-card{
+
+    background:#fff;
+
+    border:1px solid #e5e7eb;
+
+    border-radius:14px;
+
+    padding:22px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.05);
+
+}
+
+.summary-card h2{
+
+    color:#2E7D32;
+
+    margin-bottom:18px;
+
+    font-size:22px;
+
+}
+
+/* ==========================
+   Summary Grid
+========================== */
+
+.summary-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:14px;
+
+}
+
+.summary-row{
+
+    display:flex;
+
+    flex-direction:column;
+
+    background:#F8FAF8;
+
+    border:1px solid #E5E7EB;
+
+    border-radius:10px;
+
+    padding:14px;
+
+}
+
+.summary-row span{
+
+    color:#6B7280;
+
+    font-size:13px;
+
+    margin-bottom:6px;
+
+}
+
+.summary-row strong{
+
+    color:#1F2937;
+
+    font-size:16px;
+
+    font-weight:600;
+
+}
+
+.full-width{
+
+    grid-column:span 2;
+
+}
+
+/* ==========================
+   No Result
+========================== */
+
+.no-result{
+
+    text-align:center;
+
+    padding:40px 10px;
+
+    color:#666;
+
+}
+
+.no-result p{
+
+    font-size:18px;
+
+    margin-bottom:8px;
+
+}
+
+/* ==========================
+   Responsive
+========================== */
+
+@media(max-width:768px){
+
+.summary-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.full-width{
+
+grid-column:span 1;
+
+}
+
+.production-value{
+
+font-size:42px;
+
+}
+
+}

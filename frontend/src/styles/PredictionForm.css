@@ -1,0 +1,125 @@
+/* ==========================
+   Prediction Card
+========================== */
+
+.prediction-card {
+    background: #ffffff;
+    padding: 28px;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    height: 100%;
+}
+
+.prediction-card h2 {
+    color: #2E7D32;
+    margin-bottom: 24px;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+/* ==========================
+   Form Layout
+========================== */
+
+.prediction-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+/* ==========================
+   Form Group
+========================== */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #444;
+}
+
+/* ==========================
+   Inputs
+========================== */
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    height: 48px;
+    padding: 0 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #fff;
+    color: #333;
+    font-size: 15px;
+    transition: all 0.25s ease;
+}
+
+.form-group input::placeholder {
+    color: #9ca3af;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #2E7D32;
+    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
+}
+
+/* ==========================
+   Button
+========================== */
+
+.predict-btn {
+    grid-column: span 2;
+    justify-self: center;
+
+    width: 220px;
+    height: 48px;
+
+    background: #2E7D32;
+    color: white;
+
+    border: none;
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    transition: 0.3s ease;
+}
+
+.predict-btn:hover:not(:disabled) {
+    background: #1B5E20;
+    transform: translateY(-2px);
+}
+
+.predict-btn:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+}
+
+/* ==========================
+   Responsive
+========================== */
+
+@media (max-width: 768px) {
+
+    .prediction-form {
+        grid-template-columns: 1fr;
+    }
+
+    .predict-btn {
+        grid-column: span 1;
+        width: 100%;
+    }
+
+}

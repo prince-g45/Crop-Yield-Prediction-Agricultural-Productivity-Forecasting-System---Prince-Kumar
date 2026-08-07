@@ -6,3 +6,7 @@ python-dotenv
 pydantic-settings
 google-auth
 requests
+pandas
+numpy
+scikit-learn
+joblib

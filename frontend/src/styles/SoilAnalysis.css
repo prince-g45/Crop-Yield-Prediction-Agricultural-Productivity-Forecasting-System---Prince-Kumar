@@ -1,0 +1,101 @@
+/* =====================================
+   Soil Card
+===================================== */
+
+.soil-card{
+
+    background:#fff;
+
+    border:1px solid #e5e7eb;
+
+    border-radius:14px;
+
+    padding:24px;
+
+    margin-bottom:25px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.05);
+
+}
+
+.soil-card h2{
+
+    color:#2E7D32;
+
+    font-size:24px;
+
+    margin-bottom:20px;
+
+}
+
+/* =====================================
+   Grid
+===================================== */
+
+.soil-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:18px;
+
+}
+
+.soil-item{
+
+    background:#F8FAF8;
+
+    border:1px solid #E5E7EB;
+
+    border-radius:10px;
+
+    padding:16px;
+
+}
+
+.soil-item span{
+
+    display:block;
+
+    color:#6B7280;
+
+    font-size:13px;
+
+    margin-bottom:8px;
+
+}
+
+.soil-item strong{
+
+    color:#2E7D32;
+
+    font-size:18px;
+
+}
+
+.full-width{
+
+    grid-column:1/-1;
+
+}
+
+.no-soil{
+
+    text-align:center;
+
+    padding:50px 20px;
+
+    color:#777;
+
+}
+
+@media(max-width:768px){
+
+.soil-grid{
+
+grid-template-columns:1fr;
+
+}
+
+}
