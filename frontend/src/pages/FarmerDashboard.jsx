@@ -4,7 +4,7 @@ import { useState } from "react";
 import Navbar from "../components/Navbar";
 import PredictionForm from "../components/PredictionForm";
 import PredictionResult from "../components/PredictionResult";
-import SoilAnalysis from "../components/SoilAnalysis";
+
 import RecentPredictions from "../components/RecentPredictions";
 
 import "../styles/FarmerDashboard.css";
@@ -99,17 +99,9 @@ function FarmerDashboard() {
 
 </div>
 
-{/* ===========================
-    Soil Analysis
-=========================== */}
 
-<div className="soil-section">
 
-  <SoilAnalysis
-    result={predictionResult}
-  />
 
-</div>
 
 {/* ===========================
     Recent Predictions

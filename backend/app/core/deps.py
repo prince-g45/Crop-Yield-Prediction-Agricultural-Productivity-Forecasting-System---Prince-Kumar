@@ -1,5 +1,5 @@
 from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 
@@ -8,36 +8,67 @@ from app.db.session import SessionLocal
 from app.models.user import User
 
 
-# Login endpoint ka URL
-oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl="/api/v1/auth/login"
-)
+# ==========================================
+# BEARER TOKEN
+# ==========================================
+
+security = HTTPBearer()
 
 
-# Database Session
+# ==========================================
+# DATABASE SESSION
+# ==========================================
+
 def get_db():
+
     db = SessionLocal()
+
     try:
         yield db
+
     finally:
         db.close()
 
 
-# Current Logged-in User
+# ==========================================
+# CURRENT LOGGED-IN USER
+# ==========================================
+
 def get_current_user(
-    token: str = Depends(oauth2_scheme),
+    credentials: HTTPAuthorizationCredentials = Depends(security),
     db: Session = Depends(get_db),
 ):
+
     print("========== DEBUG ==========")
+
+    # --------------------------------------
+    # Get JWT Token
+    # --------------------------------------
+
+    token = credentials.credentials
+
     print("TOKEN RECEIVED:", token)
+
+
+    # --------------------------------------
+    # Authentication Error
+    # --------------------------------------
 
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
+        headers={
+            "WWW-Authenticate": "Bearer"
+        },
     )
 
+
+    # --------------------------------------
+    # Decode JWT
+    # --------------------------------------
+
     try:
+
         payload = jwt.decode(
             token,
             SECRET_KEY,
@@ -46,21 +77,48 @@ def get_current_user(
 
         print("PAYLOAD:", payload)
 
+
+        # ----------------------------------
+        # Get Email
+        # ----------------------------------
+
         email: str = payload.get("sub")
+
         print("EMAIL:", email)
 
+
         if email is None:
+
             raise credentials_exception
 
+
     except JWTError as e:
+
         print("JWT ERROR:", str(e))
+
         raise credentials_exception
 
-    user = db.query(User).filter(User.email == email).first()
+
+    # --------------------------------------
+    # Find User
+    # --------------------------------------
+
+    user = (
+        db.query(User)
+        .filter(User.email == email)
+        .first()
+    )
 
     print("USER FOUND:", user)
 
+
     if user is None:
+
         raise credentials_exception
+
+
+    # --------------------------------------
+    # Return User
+    # --------------------------------------
 
     return user

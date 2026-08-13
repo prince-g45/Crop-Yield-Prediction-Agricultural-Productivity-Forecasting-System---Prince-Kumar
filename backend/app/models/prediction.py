@@ -60,6 +60,8 @@ class Prediction(Base):
 
     recommendation = Column(String, nullable=False)
 
+    agricultural_report = Column(String, nullable=True)
+
     # =====================================
 
     created_at = Column(
