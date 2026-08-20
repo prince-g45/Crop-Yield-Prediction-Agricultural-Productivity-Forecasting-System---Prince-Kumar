@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import api from "../services/api";
 import "../styles/Login.css";
 
@@ -293,6 +294,8 @@ function Login() {
         </div>
 
       </div>
+
+      <Footer />
 
     </>
 

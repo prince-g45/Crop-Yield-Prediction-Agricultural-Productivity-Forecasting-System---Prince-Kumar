@@ -2,66 +2,111 @@
    GLOBAL
 ========================================== */
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-body{
-    background:#f5f7f5;
+body {
+    background: #f5f7f5;
 }
+
+
+/* ==========================================
+   FARMER DASHBOARD PAGE
+========================================== */
+
+.farmer-dashboard-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 
 /* ==========================================
    DASHBOARD
 ========================================== */
 
-.dashboard-container{
-    max-width:1400px;
-    margin:90px auto 40px;
-    padding:0 20px;
+.dashboard-container {
+    width: 100%;
+    max-width: 1400px;
+
+    margin: 90px auto 40px;
+
+    padding: 0 20px;
+
+    flex: 1;
 }
 
-.dashboard-header{
-    margin-bottom:25px;
+
+/* ==========================================
+   DASHBOARD HEADER
+========================================== */
+
+.dashboard-header {
+    margin-bottom: 25px;
 }
 
-.dashboard-header h1{
-    color:#2E7D32;
-    font-size:38px;
-    font-weight:700;
-    margin-bottom:8px;
+.dashboard-header h1 {
+    color: #2E7D32;
+
+    font-size: 38px;
+    font-weight: 700;
+
+    margin-bottom: 8px;
 }
 
-.dashboard-header p{
-    color:#666;
-    font-size:16px;
+.dashboard-header p {
+    color: #666;
+    font-size: 16px;
 }
+
 
 /* ==========================================
    MAIN LAYOUT
 ========================================== */
 
-.prediction-section{
-    display:flex;
-    gap:25px;
-    align-items:flex-start;
-    margin-bottom:25px;
+.prediction-section {
+    display: flex;
+
+    gap: 25px;
+
+    align-items: flex-start;
+
+    margin-bottom: 25px;
 }
 
-.prediction-left{
-    flex:1.7;
+.prediction-left {
+    flex: 1.7;
+    min-width: 0;
 }
 
-.prediction-right{
-    width:320px;
-    flex-shrink:0;
+.prediction-right {
+    width: 320px;
+
+    flex-shrink: 0;
 }
 
-.summary-section{
-    margin-bottom:25px;
+
+/* ==========================================
+   SUMMARY
+========================================== */
+
+.summary-section {
+    margin-bottom: 25px;
 }
+
+
+/* ==========================================
+   RECENT PREDICTIONS
+========================================== */
+
+.recent-predictions-section {
+    margin-bottom: 30px;
+}
+
 
 /* ==========================================
    COMMON CARDS
@@ -70,225 +115,280 @@ body{
 .weather-card,
 .prediction-card,
 .summary-card,
-.history-card{
-    background:#fff;
-    border:1px solid #e5e7eb;
-    border-radius:14px;
-    padding:24px;
-    box-shadow:0 4px 12px rgba(0,0,0,.06);
+.history-card {
+    background: #fff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 14px;
+
+    padding: 24px;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .06);
 }
 
 .prediction-card h2,
 .summary-card h2,
-.history-card h2{
-    color:#2E7D32;
-    font-size:24px;
-    margin-bottom:20px;
+.history-card h2 {
+    color: #2E7D32;
+
+    font-size: 24px;
+
+    margin-bottom: 20px;
 }
+
 
 /* ==========================================
    WEATHER
 ========================================== */
 
-.weather-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:18px;
+.weather-grid {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 18px;
 }
 
-.weather-grid div{
-    background:#fafafa;
-    border:1px solid #ececec;
-    border-radius:10px;
-    padding:15px;
+.weather-grid div {
+    background: #fafafa;
+
+    border: 1px solid #ececec;
+
+    border-radius: 10px;
+
+    padding: 15px;
 }
 
-.weather-grid h4{
-    font-size:14px;
-    color:#666;
-    margin-bottom:8px;
+.weather-grid h4 {
+    font-size: 14px;
+
+    color: #666;
+
+    margin-bottom: 8px;
 }
 
-.weather-grid p{
-    font-size:18px;
-    font-weight:600;
+.weather-grid p {
+    font-size: 18px;
+
+    font-weight: 600;
 }
+
 
 /* ==========================================
    FORM
 ========================================== */
 
-.prediction-form{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:20px;
+.prediction-form {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 20px;
 }
 
-.form-group{
-    display:flex;
-    flex-direction:column;
+.form-group {
+    display: flex;
+
+    flex-direction: column;
 }
 
-.form-group label{
-    margin-bottom:8px;
-    font-size:14px;
-    font-weight:600;
-    color:#444;
+.form-group label {
+    margin-bottom: 8px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #444;
 }
 
 .form-group input,
-.form-group select{
-    width:100%;
-    height:48px;
-    padding:0 14px;
-    border:1px solid #d1d5db;
-    border-radius:8px;
-    background:#fff;
-    font-size:15px;
-    transition:.3s;
+.form-group select {
+    width: 100%;
+
+    height: 48px;
+
+    padding: 0 14px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    background: #fff;
+
+    font-size: 15px;
+
+    transition: .3s;
 }
 
 .form-group input:focus,
-.form-group select:focus{
-    outline:none;
-    border-color:#2E7D32;
-    box-shadow:0 0 0 3px rgba(46,125,50,.15);
-}
+.form-group select:focus {
+    outline: none;
 
-.predict-btn{
-    grid-column:span 2;
-    justify-self:center;
+    border-color: #2E7D32;
 
-    width:220px;
-    height:48px;
-
-    border:none;
-    border-radius:8px;
-
-    background:#2E7D32;
-    color:#fff;
-
-    font-size:16px;
-    font-weight:600;
-
-    cursor:pointer;
-    transition:.3s;
-}
-
-.predict-btn:hover:not(:disabled){
-    background:#1B5E20;
-    transform:translateY(-2px);
-}
-
-.predict-btn:disabled{
-    background:#94a3b8;
-    cursor:not-allowed;
+    box-shadow:
+        0 0 0 3px rgba(46, 125, 50, .15);
 }
 
 
+/* ==========================================
+   PREDICT BUTTON
+========================================== */
+
+.predict-btn {
+    grid-column: span 2;
+
+    justify-self: center;
+
+    width: 220px;
+
+    height: 48px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #2E7D32;
+
+    color: #fff;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .3s;
+}
+
+.predict-btn:hover:not(:disabled) {
+    background: #1B5E20;
+
+    transform: translateY(-2px);
+}
+
+.predict-btn:disabled {
+    background: #94a3b8;
+
+    cursor: not-allowed;
+}
 
 
 /* ==========================================
    HERO CARD
 ========================================== */
 
-.production-card{
-    height:320px;
+.production-card {
+    height: 320px;
 
-    border-radius:16px;
+    border-radius: 16px;
 
-    background:linear-gradient(135deg,#43a047,#2E7D32);
+    background:
+        linear-gradient(
+            135deg,
+            #43a047,
+            #2E7D32
+        );
 
-    color:#fff;
+    color: #fff;
 
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
+    display: flex;
 
-    text-align:center;
+    flex-direction: column;
 
-    box-shadow:0 8px 18px rgba(46,125,50,.25);
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+
+    box-shadow:
+        0 8px 18px rgba(46, 125, 50, .25);
 }
 
-.production-card h2{
-    color:#fff;
-    font-size:24px;
-    margin-bottom:15px;
+.production-card h2 {
+    color: #fff;
+
+    font-size: 24px;
+
+    margin-bottom: 15px;
 }
 
-.production-value{
-    font-size:52px;
-    font-weight:700;
-    margin-bottom:10px;
+.production-value {
+    font-size: 52px;
+
+    font-weight: 700;
+
+    margin-bottom: 10px;
 }
 
-.production-card p{
-    font-size:20px;
-    margin-bottom:15px;
+.production-card p {
+    font-size: 20px;
+
+    margin-bottom: 15px;
 }
 
-.production-card span{
-    background:rgba(255,255,255,.18);
-    padding:8px 20px;
-    border-radius:30px;
-    font-size:14px;
+.production-card span {
+    background: rgba(255, 255, 255, .18);
+
+    padding: 8px 20px;
+
+    border-radius: 30px;
+
+    font-size: 14px;
 }
+
 
 /* ==========================================
    NEW PREDICTION BUTTON
 ========================================== */
 
-.new-prediction-btn{
+.new-prediction-btn {
+    width: 100%;
 
-    width:100%;
+    margin-top: 18px;
 
-    margin-top:18px;
+    padding: 14px 18px;
 
-    padding:14px 18px;
+    background: #ffffff;
 
-    background:#ffffff;
+    color: #2E7D32;
 
-    color:#2E7D32;
+    border: 2px solid #2E7D32;
 
-    border:2px solid #2E7D32;
+    border-radius: 10px;
 
-    border-radius:10px;
+    font-size: 15px;
 
-    font-size:15px;
+    font-weight: 600;
 
-    font-weight:600;
+    cursor: pointer;
 
-    cursor:pointer;
-
-    transition:all .3s ease;
-
+    transition: all .3s ease;
 }
 
-.new-prediction-btn:hover{
+.new-prediction-btn:hover {
+    background: #2E7D32;
 
-    background:#2E7D32;
+    color: #ffffff;
 
-    color:#ffffff;
+    transform: translateY(-2px);
 
-    transform:translateY(-2px);
-
-    box-shadow:0 6px 15px rgba(46,125,50,.25);
-
+    box-shadow:
+        0 6px 15px rgba(46, 125, 50, .25);
 }
 
-.new-prediction-btn:active{
-
-    transform:scale(.98);
-
+.new-prediction-btn:active {
+    transform: scale(.98);
 }
 
-.new-prediction-btn:focus{
+.new-prediction-btn:focus {
+    outline: none;
 
-    outline:none;
-
-    box-shadow:0 0 0 4px rgba(46,125,50,.18);
-
+    box-shadow:
+        0 0 0 4px rgba(46, 125, 50, .18);
 }
 
 
@@ -296,202 +396,272 @@ body{
    DELETE BUTTON
 ========================================== */
 
-.delete-btn{
+.delete-btn {
+    background: #e87676;
 
-    background:#e87676;
+    color: white;
 
-    color:white;
+    border: none;
 
-    border:none;
+    border-radius: 8px;
 
-    border-radius:8px;
+    padding: 8px 14px;
 
-    padding:8px 14px;
+    cursor: pointer;
 
-    cursor:pointer;
+    font-size: 14px;
 
-    font-size:14px;
+    font-weight: 600;
 
-    font-weight:600;
-
-    transition:.3s;
-
+    transition: .3s;
 }
 
-.delete-btn:hover{
+.delete-btn:hover {
+    background: #b91c1c;
 
-    background:#b91c1c;
-
-    transform:translateY(-2px);
-
+    transform: translateY(-2px);
 }
+
 
 /* ==========================================
    SUMMARY
 ========================================== */
 
-.summary-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:16px;
+.summary-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 16px;
 }
 
-.summary-row{
-    background:#fafafa;
-    border:1px solid #ececec;
-    border-radius:10px;
-    padding:16px;
+.summary-row {
+    background: #fafafa;
+
+    border: 1px solid #ececec;
+
+    border-radius: 10px;
+
+    padding: 16px;
 }
 
-.summary-row span{
-    display:block;
-    color:#666;
-    font-size:13px;
-    margin-bottom:6px;
+.summary-row span {
+    display: block;
+
+    color: #666;
+
+    font-size: 13px;
+
+    margin-bottom: 6px;
 }
 
-.summary-row strong{
-    color:#2E7D32;
-    font-size:18px;
+.summary-row strong {
+    color: #2E7D32;
+
+    font-size: 18px;
 }
 
-.full-width{
-    grid-column:1/-1;
+.full-width {
+    grid-column: 1 / -1;
 }
 
-.no-result{
-    text-align:center;
-    padding:50px 20px;
-    color:#777;
+.no-result {
+    text-align: center;
+
+    padding: 50px 20px;
+
+    color: #777;
 }
+
 
 /* ==========================================
    HISTORY
 ========================================== */
 
-.history-card{
-    margin-top:25px;
+.history-card {
+    margin-top: 25px;
 }
 
-.history-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-end;
-    margin-bottom:20px;
+.history-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-end;
+
+    margin-bottom: 20px;
 }
 
-.history-header h2{
-    color:#2E7D32;
+.history-header h2 {
+    color: #2E7D32;
 }
 
-.history-header p{
-    color:#6b7280;
-    font-size:14px;
+.history-header p {
+    color: #6b7280;
+
+    font-size: 14px;
 }
 
-.table-container{
-    overflow-x:auto;
+.table-container {
+    overflow-x: auto;
 }
 
-.history-table{
-    width:100%;
-    border-collapse:collapse;
+.history-table {
+    width: 100%;
+
+    border-collapse: collapse;
 }
 
-.history-table thead{
-    background:#F3F8F3;
+.history-table thead {
+    background: #F3F8F3;
 }
 
-.history-table th{
-    padding:16px;
-    text-align:left;
-    color:#2E7D32;
-    border-bottom:2px solid #E5E7EB;
+.history-table th {
+    padding: 16px;
+
+    text-align: left;
+
+    color: #2E7D32;
+
+    border-bottom: 2px solid #E5E7EB;
 }
 
-.history-table td{
-    padding:16px;
-    border-bottom:1px solid #ECECEC;
-    color:#374151;
+.history-table td {
+    padding: 16px;
+
+    border-bottom: 1px solid #ECECEC;
+
+    color: #374151;
 }
 
-.history-table tbody tr{
-    transition:.25s;
+.history-table tbody tr {
+    transition: .25s;
 }
 
-.history-table tbody tr:hover{
-    background:#F8FAF8;
+.history-table tbody tr:hover {
+    background: #F8FAF8;
 }
 
-.empty-history{
-    text-align:center;
-    padding:60px 20px;
+.empty-history {
+    text-align: center;
+
+    padding: 60px 20px;
 }
 
-.empty-history h3{
-    color:#2E7D32;
-    margin-bottom:10px;
+.empty-history h3 {
+    color: #2E7D32;
+
+    margin-bottom: 10px;
 }
 
-.empty-history p{
-    color:#6B7280;
+.empty-history p {
+    color: #6B7280;
 }
+
+
+/* ==========================================
+   FOOTER SPACING
+========================================== */
+
+.farmer-dashboard-page > .footer {
+    width: 100%;
+
+    margin-top: auto;
+}
+
 
 /* ==========================================
    RESPONSIVE
 ========================================== */
 
-@media (max-width:1100px){
+@media (max-width: 1100px) {
 
-    .prediction-section{
-        flex-direction:column;
+    .prediction-section {
+        flex-direction: column;
     }
 
     .prediction-left,
-    .prediction-right{
-        width:100%;
+    .prediction-right {
+        width: 100%;
     }
 
-    .summary-grid{
-        grid-template-columns:repeat(2,1fr);
+    .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
-    .weather-grid{
-        grid-template-columns:repeat(2,1fr);
+    .weather-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
 }
 
-@media (max-width:768px){
 
-    .dashboard-container{
-        margin-top:80px;
+@media (max-width: 768px) {
+
+    .dashboard-container {
+        margin-top: 80px;
+
+        padding-left: 16px;
+        padding-right: 16px;
     }
 
-    .prediction-form{
-        grid-template-columns:1fr;
+    .dashboard-header h1 {
+        font-size: 30px;
     }
 
-    .predict-btn{
-        grid-column:span 1;
-        width:100%;
+    .dashboard-header p {
+        font-size: 14px;
     }
 
-    .summary-grid{
-        grid-template-columns:1fr;
+    .prediction-form {
+        grid-template-columns: 1fr;
     }
 
-    .weather-grid{
-        grid-template-columns:1fr;
+    .predict-btn {
+        grid-column: span 1;
+
+        width: 100%;
     }
 
-    .history-table{
-        display:block;
-        overflow-x:auto;
+    .summary-grid {
+        grid-template-columns: 1fr;
     }
 
-    .production-card{
-        height:260px;
+    .weather-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .history-table {
+        display: block;
+
+        overflow-x: auto;
+    }
+
+    .production-card {
+        height: 260px;
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .dashboard-container {
+        margin-top: 70px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 26px;
+    }
+
+    .prediction-card,
+    .summary-card,
+    .history-card {
+        padding: 18px;
+    }
+
+    .production-value {
+        font-size: 44px;
     }
 
 }

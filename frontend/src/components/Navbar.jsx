@@ -62,7 +62,7 @@ function Navbar({
 
           <h2>YieldSense AI</h2>
 
-          <p>Crop Yield Prediction</p>
+          
 
         </div>
 

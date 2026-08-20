@@ -1,0 +1,233 @@
+/* ==========================================
+   FOOTER
+========================================== */
+
+.footer {
+  width: 100%;
+  margin-top: 60px;
+
+  background: #073b2a;
+  color: #ffffff;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  box-sizing: border-box;
+}
+
+
+/* ==========================================
+   CONTENT
+========================================== */
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+
+  padding: 42px 30px 38px;
+
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.3fr;
+
+  gap: 80px;
+
+  box-sizing: border-box;
+}
+
+
+/* ==========================================
+   BRAND
+========================================== */
+
+.footer-brand h3 {
+  margin: 0 0 9px;
+
+  font-size: 20px;
+  font-weight: 600;
+
+  letter-spacing: -0.3px;
+}
+
+.footer-brand h3 span {
+  color: #79cba5;
+}
+
+.footer-brand p {
+  margin: 0;
+
+  color: #a8cfc0;
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+
+/* ==========================================
+   COLUMNS
+========================================== */
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.footer-heading {
+  margin: 0 0 16px;
+
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+/* ==========================================
+   LINKS
+========================================== */
+
+.footer-column > a {
+  margin-bottom: 11px;
+
+  color: #a8cfc0;
+
+  text-decoration: none;
+
+  font-size: 13px;
+
+  transition: color 0.2s ease;
+}
+
+.footer-column > a:hover {
+  color: #ffffff;
+}
+
+
+/* ==========================================
+   CONTACT
+========================================== */
+
+.contact-item {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  margin-bottom: 12px;
+
+  color: #a8cfc0;
+}
+
+.contact-item svg {
+  flex-shrink: 0;
+}
+
+.contact-item a {
+  margin: 0;
+
+  color: #a8cfc0;
+
+  font-size: 13px;
+
+  text-decoration: none;
+
+  transition: color 0.2s ease;
+}
+
+.contact-item a:hover {
+  color: #ffffff;
+}
+
+.help-text {
+  max-width: 270px;
+
+  margin: 3px 0 0;
+
+  color: #789f92;
+
+  font-size: 12px;
+
+  line-height: 1.6;
+}
+
+
+/* ==========================================
+   BOTTOM
+========================================== */
+
+.footer-bottom {
+  width: 100%;
+
+  padding: 16px 20px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  box-sizing: border-box;
+
+  text-align: center;
+
+  color: #789f92;
+
+  font-size: 11px;
+}
+
+
+/* ==========================================
+   REMOVE UNWANTED FOOTER GAPS
+========================================== */
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr 1fr;
+
+    gap: 40px;
+
+    padding: 38px 30px;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 480px) {
+  .footer {
+    margin-top: 45px;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+
+    gap: 28px;
+
+    padding: 35px 20px;
+  }
+
+  .footer-brand {
+    grid-column: auto;
+  }
+
+  .footer-bottom {
+    padding: 15px 15px;
+
+    font-size: 10px;
+  }
+
+  
+}

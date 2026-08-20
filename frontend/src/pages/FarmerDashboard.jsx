@@ -1,29 +1,33 @@
 import { useState } from "react";
 
-
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import PredictionForm from "../components/PredictionForm";
 import PredictionResult from "../components/PredictionResult";
-
 import RecentPredictions from "../components/RecentPredictions";
 
 import "../styles/FarmerDashboard.css";
 
+
 function FarmerDashboard() {
 
-  // ===========================
-  // States
-  // ===========================
+  // ==========================================
+  // STATES
+  // ==========================================
 
-  const [predictionResult, setPredictionResult] = useState(null);
+  const [predictionResult, setPredictionResult] =
+    useState(null);
 
-  const [resetForm, setResetForm] = useState(false);
+  const [resetForm, setResetForm] =
+    useState(false);
 
-  const [refreshHistory, setRefreshHistory] = useState(false);
+  const [refreshHistory, setRefreshHistory] =
+    useState(false);
 
-  // ===========================
-  // New Prediction
-  // ===========================
+
+  // ==========================================
+  // NEW PREDICTION
+  // ==========================================
 
   const handleNewPrediction = () => {
 
@@ -33,91 +37,141 @@ function FarmerDashboard() {
 
   };
 
+
+  // ==========================================
+  // USER NAME
+  // ==========================================
+
+  const fullName =
+    localStorage.getItem("full_name") || "Farmer";
+
+
+  // ==========================================
+  // RENDER
+  // ==========================================
+
   return (
 
-    <>
+    <div className="farmer-dashboard-page">
+
+      {/* ======================================
+          NAVBAR
+      ======================================= */}
 
       <Navbar />
 
-      <div className="dashboard-container">
 
-        {/* ===========================
-            Header
-        =========================== */}
+      {/* ======================================
+          MAIN CONTENT
+      ======================================= */}
 
-        <div className="dashboard-header">
+      <main className="dashboard-container">
+
+        {/* ====================================
+            DASHBOARD HEADER
+        ===================================== */}
+
+        <section className="dashboard-header">
 
           <h1>
-            Hello, {localStorage.getItem("full_name")}
+            Hello, {fullName}
           </h1>
 
           <p>
-            Welcome back! Predict your crop yield using YieldSense AI.
+            Predict your crop yield and get
+            practical farming insights.
           </p>
 
-        </div>
+        </section>
 
-        {/* ===========================
-            Form + Hero Card
-        =========================== */}
 
-        <div className="prediction-section">
+        {/* ====================================
+            PREDICTION SECTION
+        ===================================== */}
+
+        <section className="prediction-section">
+
+          {/* LEFT — PREDICTION FORM */}
 
           <div className="prediction-left">
 
             <PredictionForm
-              setPredictionResult={setPredictionResult}
+              setPredictionResult={
+                setPredictionResult
+              }
+
               resetForm={resetForm}
+
               setResetForm={setResetForm}
-              setRefreshHistory={setRefreshHistory}
+
+              setRefreshHistory={
+                setRefreshHistory
+              }
             />
 
           </div>
+
+
+          {/* RIGHT — RESULT */}
 
           <div className="prediction-right">
 
             <PredictionResult
               result={predictionResult}
               variant="hero"
-              onNewPrediction={handleNewPrediction}
+              onNewPrediction={
+                handleNewPrediction
+              }
             />
 
           </div>
 
-        </div>
-
-        {/* ===========================
-    Prediction Summary
-=========================== */}
-
-<div className="summary-section">
-
-  <PredictionResult
-    result={predictionResult}
-    variant="summary"
-  />
-
-</div>
+        </section>
 
 
+        {/* ====================================
+            PREDICTION SUMMARY
+        ===================================== */}
+
+        <section className="summary-section">
+
+          <PredictionResult
+            result={predictionResult}
+            variant="summary"
+          />
+
+        </section>
 
 
+        {/* ====================================
+            RECENT PREDICTIONS
+        ===================================== */}
 
-{/* ===========================
-    Recent Predictions
-=========================== */}
+        <section className="recent-predictions-section">
 
-<RecentPredictions
-  refreshHistory={refreshHistory}
-  setRefreshHistory={setRefreshHistory}
-/>
+          <RecentPredictions
+            refreshHistory={refreshHistory}
+            setRefreshHistory={
+              setRefreshHistory
+            }
+          />
 
-      </div>
+        </section>
 
-    </>
+      </main>
+
+
+      {/* ======================================
+          FOOTER
+      ======================================= */}
+
+      <Footer />
+
+    </div>
 
   );
 
 }
+
 
 export default FarmerDashboard;

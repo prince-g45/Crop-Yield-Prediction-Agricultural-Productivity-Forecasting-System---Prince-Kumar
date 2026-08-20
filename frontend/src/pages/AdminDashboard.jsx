@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 import DashboardOverview from "../components/DashboardOverview";
 import FarmerManagement from "../components/FarmerManagement";
@@ -10,9 +11,16 @@ import Analytics from "../components/Analytics";
 
 import "../styles/AdminDashboard.css";
 
+
 function AdminDashboard() {
 
-  const [activeSection, setActiveSection] = useState("dashboard");
+  const [activeSection, setActiveSection] =
+    useState("dashboard");
+
+
+  // ==========================================
+  // RENDER ACTIVE SECTION
+  // ==========================================
 
   const renderSection = () => {
 
@@ -40,25 +48,47 @@ function AdminDashboard() {
 
   };
 
+
+  // ==========================================
+  // UI
+  // ==========================================
+
   return (
 
-    <>
+    <div className="admin-page">
+
+      {/* ======================================
+          NAVBAR
+      ======================================= */}
 
       <Navbar
         activeSection={activeSection}
         setActiveSection={setActiveSection}
       />
 
-      <div className="admin-container">
+
+      {/* ======================================
+          MAIN ADMIN CONTENT
+      ======================================= */}
+
+      <main className="admin-container">
 
         {renderSection()}
 
-      </div>
+      </main>
 
-    </>
+
+      {/* ======================================
+          FOOTER
+      ======================================= */}
+
+      <Footer />
+
+    </div>
 
   );
 
 }
+
 
 export default AdminDashboard;
