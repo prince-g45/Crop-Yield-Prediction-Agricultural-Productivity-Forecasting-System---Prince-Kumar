@@ -5,12 +5,15 @@ import Signup from "./pages/Signup";
 import About from "./pages/About";
 import ChooseRole from "./pages/ChooseRole";
 
-
 import FarmerDashboard from "./pages/FarmerDashboard";
+import FarmerAnalytics from "./pages/FarmerAnalytics";
+import FarmerReports from "./pages/FarmerReports";
+
 import AdminDashboard from "./pages/AdminDashboard";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
+
 
 function App() {
 
@@ -20,29 +23,48 @@ function App() {
 
       <Routes>
 
-        {/* Authentication */}
+        {/* ======================================
+            AUTHENTICATION
+        ======================================= */}
 
-        <Route path="/" element={<Login />} />
+        <Route
+          path="/"
+          element={<Login />}
+        />
 
-        <Route path="/signup" element={<Signup />} />
+        <Route
+          path="/signup"
+          element={<Signup />}
+        />
 
-        <Route path="/about" element={<About />} />
+        <Route
+          path="/about"
+          element={<About />}
+        />
 
-        
-        <Route path="/choose-role" element={<ChooseRole />} />
+        <Route
+          path="/choose-role"
+          element={<ChooseRole />}
+        />
 
-        {/* Administrator */}
 
-<Route
-  path="/admin-dashboard"
-  element={
-    <ProtectedAdminRoute>
-      <AdminDashboard />
-    </ProtectedAdminRoute>
-  }
-/>
+        {/* ======================================
+            ADMINISTRATOR
+        ======================================= */}
 
-        {/* Farmer */}
+        <Route
+          path="/admin-dashboard"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboard />
+            </ProtectedAdminRoute>
+          }
+        />
+
+
+        {/* ======================================
+            FARMER DASHBOARD
+        ======================================= */}
 
         <Route
           path="/farmer-dashboard"
@@ -53,11 +75,38 @@ function App() {
           }
         />
 
-      
 
-        
+        {/* ======================================
+            FARMER ANALYTICS
+        ======================================= */}
 
-        {/* Agriculture Department */}
+        <Route
+          path="/farmer-analytics"
+          element={
+            <ProtectedRoute>
+              <FarmerAnalytics />
+            </ProtectedRoute>
+          }
+        />
+
+
+        {/* ======================================
+            FARMER REPORTS
+        ======================================= */}
+
+        <Route
+          path="/farmer-reports"
+          element={
+            <ProtectedRoute>
+              <FarmerReports />
+            </ProtectedRoute>
+          }
+        />
+
+
+        {/* ======================================
+            AGRICULTURE DEPARTMENT
+        ======================================= */}
 
         <Route
           path="/department-dashboard"
@@ -68,9 +117,6 @@ function App() {
           }
         />
 
-
-        
-
       </Routes>
 
     </BrowserRouter>
@@ -78,5 +124,6 @@ function App() {
   );
 
 }
+
 
 export default App;

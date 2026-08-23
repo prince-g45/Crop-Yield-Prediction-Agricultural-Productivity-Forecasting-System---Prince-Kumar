@@ -1175,3 +1175,33 @@
   }
 
 }
+
+/* NEW PREDICTION BUTTON */
+
+.prediction-hero-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.new-prediction-btn {
+    width: 100%;
+    height: 46px;
+
+    background: white;
+    color: #2e7d32;
+
+    border: 1px solid #2e7d32;
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.new-prediction-btn:hover {
+    background: #2e7d32;
+    color: white;
+}

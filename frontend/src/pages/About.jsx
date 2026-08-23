@@ -1,4 +1,6 @@
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+
 import "../styles/About.css";
 
 function About() {
@@ -8,11 +10,13 @@ function About() {
 
       <main className="about-page">
 
-        {/* Hero */}
+        {/* =========================
+            HERO
+        ========================= */}
         <section className="about-hero">
 
           <span className="about-label">
-            ABOUT YIELDSENSE AI
+            YIELDSENSE AI
           </span>
 
           <h1>
@@ -22,45 +26,78 @@ function About() {
           </h1>
 
           <p>
-            An AI-powered agricultural platform designed to help farmers
-            understand their crops, soil, weather, and expected yield.
+            An AI-powered agricultural platform that combines crop,
+            soil, weather, and yield data to support better farming decisions.
           </p>
 
         </section>
 
 
-        {/* About */}
+        {/* =========================
+            PROJECT INTRO
+        ========================= */}
         <section className="about-intro">
 
-          <div className="section-heading">
-            <span>01</span>
-            <h2>About the Project</h2>
+          <div className="intro-content">
+
+            <div className="section-number">
+              01
+            </div>
+
+            <div>
+
+              <span className="section-label">
+                THE PROJECT
+              </span>
+
+              <h2>
+                Data-driven farming intelligence
+              </h2>
+
+              <p>
+                YieldSense AI is an intelligent agricultural platform
+                developed to help farmers and agricultural organizations
+                make better farming decisions.
+              </p>
+
+              <p>
+                The platform brings together machine learning, weather
+                information, soil analysis, and crop data to provide
+                practical agricultural insights in one place.
+              </p>
+
+            </div>
+
           </div>
-
-          <p>
-            YieldSense AI is an intelligent agricultural platform developed
-            to help farmers and agricultural organizations make better
-            farming decisions. The system combines artificial intelligence,
-            machine learning, weather information, and soil analysis to
-            provide useful agricultural insights.
-          </p>
-
-          <p>
-            From predicting crop yield to understanding soil conditions and
-            monitoring weather, YieldSense AI brings important farming
-            information together in one simple platform.
-          </p>
 
         </section>
 
 
-        {/* Features */}
+        {/* =========================
+            FEATURES
+        ========================= */}
         <section className="about-features">
 
-          <div className="section-heading centered">
-            <span>02</span>
-            <h2>What We Provide</h2>
+          <div className="section-heading">
+
+            <div className="section-number">
+              02
+            </div>
+
+            <div>
+
+              <span className="section-label">
+                PLATFORM CAPABILITIES
+              </span>
+
+              <h2>
+                What YieldSense AI provides
+              </h2>
+
+            </div>
+
           </div>
+
 
           <div className="feature-grid">
 
@@ -129,8 +166,8 @@ function About() {
               </h3>
 
               <p>
-                View important agricultural information through a clear and
-                easy-to-understand dashboard.
+                Explore agricultural data through clear analytics,
+                visualizations, and decision-support insights.
               </p>
 
             </article>
@@ -140,13 +177,31 @@ function About() {
         </section>
 
 
-        {/* Technology */}
+        {/* =========================
+            TECHNOLOGY
+        ========================= */}
         <section className="technology">
 
-          <div className="section-heading centered">
-            <span>03</span>
-            <h2>Technology Stack</h2>
+          <div className="section-heading">
+
+            <div className="section-number">
+              03
+            </div>
+
+            <div>
+
+              <span className="section-label">
+                TECHNOLOGY
+              </span>
+
+              <h2>
+                Built with modern technologies
+              </h2>
+
+            </div>
+
           </div>
+
 
           <div className="technology-list">
 
@@ -164,7 +219,9 @@ function About() {
         </section>
 
 
-        {/* Footer Statement */}
+        {/* =========================
+            FINAL STATEMENT
+        ========================= */}
         <section className="about-footer">
 
           <div className="footer-line"></div>
@@ -174,13 +231,20 @@ function About() {
           </h2>
 
           <p>
-            YieldSense AI brings agricultural data and intelligent insights
-            together to support modern farming.
+            YieldSense AI brings agricultural data and intelligent
+            insights together to support modern farming.
           </p>
 
         </section>
 
       </main>
+
+
+      {/* =========================
+          SITE FOOTER
+      ========================= */}
+      <Footer />
+
     </>
   );
 }

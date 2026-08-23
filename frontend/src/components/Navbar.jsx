@@ -1,34 +1,68 @@
 import { useEffect, useState } from "react";
 
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { User, LogOut } from "lucide-react";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+
+import {
+  User,
+  LogOut,
+} from "lucide-react";
+
 import "../styles/Navbar.css";
+
 import logo from "../assets/logo.png";
 
 import WeatherDropdown from "./WeatherDropdown";
+
+
 function Navbar({
-
   activeSection,
-
   setActiveSection,
-
 }) {
 
   const location = useLocation();
 
   const navigate = useNavigate();
 
-  const isDashboard = location.pathname.includes("dashboard");
+  const role =
+    localStorage.getItem("role");
 
-  const role = localStorage.getItem("role");
+  const [userName, setUserName] =
+    useState("");
 
-  const [userName, setUserName] = useState("");
 
-  
+  // ==========================================
+  // CURRENT PAGE
+  // ==========================================
+
+  const isDashboard =
+    location.pathname.includes("dashboard");
+
+  const isFarmerPage =
+    role !== "Administrator" &&
+    (
+      location.pathname ===
+        "/farmer-dashboard" ||
+
+      location.pathname ===
+        "/farmer-analytics" ||
+
+      location.pathname ===
+        "/farmer-reports"
+    );
+
+
+  // ==========================================
+  // USER NAME
+  // ==========================================
 
   useEffect(() => {
 
-    const name = localStorage.getItem("full_name");
+    const name =
+      localStorage.getItem("full_name");
 
     if (name) {
 
@@ -38,7 +72,10 @@ function Navbar({
 
   }, []);
 
-  
+
+  // ==========================================
+  // LOGOUT
+  // ==========================================
 
   const handleLogout = () => {
 
@@ -48,279 +85,354 @@ function Navbar({
 
   };
 
+
+  // ==========================================
+  // RENDER
+  // ==========================================
+
   return (
 
     <nav className="navbar">
 
-      {/* Logo */}
+      {/* ======================================
+          LOGO
+      ======================================= */}
 
       <div className="logo">
 
-        <img src={logo} alt="YieldSense AI" />
+        <img
+          src={logo}
+          alt="YieldSense AI"
+        />
 
         <div className="logo-text">
 
-          <h2>YieldSense AI</h2>
-
-          
+          <h2>
+            YieldSense AI
+          </h2>
 
         </div>
 
       </div>
 
+
+      {/* ======================================
+          NAVIGATION
+      ======================================= */}
+
       <ul className="nav-links">
 
-        {isDashboard ? (
 
-          role === "Administrator" ? (
+        {/* ====================================
+            ADMIN NAVIGATION
+        ===================================== */}
 
-            <>
+        {role === "Administrator" &&
+        isDashboard ? (
+
+          <>
+
+            {/* Dashboard */}
+
+            <li>
+
+              <button
+                className={`nav-btn ${
+                  activeSection === "dashboard"
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() =>
+                  setActiveSection(
+                    "dashboard"
+                  )
+                }
+              >
+                Dashboard
+              </button>
 
-              <li>
+            </li>
 
-                <button
 
-                  className={`nav-btn ${
+            {/* Farmers */}
 
-                    activeSection === "dashboard"
+            <li>
 
-                      ? "active"
+              <button
+                className={`nav-btn ${
+                  activeSection === "farmers"
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() =>
+                  setActiveSection(
+                    "farmers"
+                  )
+                }
+              >
+                Farmers
+              </button>
 
-                      : ""
+            </li>
 
-                  }`}
 
-                  onClick={() =>
+            {/* Predictions */}
 
-                    setActiveSection("dashboard")
+            <li>
 
-                  }
+              <button
+                className={`nav-btn ${
+                  activeSection === "predictions"
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() =>
+                  setActiveSection(
+                    "predictions"
+                  )
+                }
+              >
+                Predictions
+              </button>
 
-                >
+            </li>
 
-                  Dashboard
 
-                </button>
+            {/* Datasets */}
 
-              </li>
+            <li>
 
-              <li>
+              <button
+                className={`nav-btn ${
+                  activeSection === "datasets"
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() =>
+                  setActiveSection(
+                    "datasets"
+                  )
+                }
+              >
+                Datasets
+              </button>
 
-                <button
+            </li>
 
-                  className={`nav-btn ${
 
-                    activeSection === "farmers"
+            {/* Analytics */}
 
-                      ? "active"
+            <li>
 
-                      : ""
+              <button
+                className={`nav-btn ${
+                  activeSection === "analytics"
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() =>
+                  setActiveSection(
+                    "analytics"
+                  )
+                }
+              >
+                Analytics
+              </button>
 
-                  }`}
+            </li>
 
-                  onClick={() =>
 
-                    setActiveSection("farmers")
+            {/* Admin User */}
 
-                  }
+            <li>
 
-                >
+              <div className="admin-user">
 
-                  Farmers
+                <User size={18} />
 
-                </button>
+                <span>
+                  {userName}
+                </span>
 
-              </li>
+              </div>
 
-              <li>
+            </li>
 
-                <button
 
-                  className={`nav-btn ${
+            {/* Logout */}
 
-                    activeSection === "predictions"
+            <li>
 
-                      ? "active"
+              <button
+                className="logout-btn"
+                onClick={handleLogout}
+              >
 
-                      : ""
+                <LogOut size={18} />
 
-                  }`}
+                Logout
 
-                  onClick={() =>
+              </button>
 
-                    setActiveSection("predictions")
+            </li>
 
-                  }
+          </>
 
-                >
 
-                  Predictions
+        ) : isFarmerPage ? (
 
-                </button>
+          /* ==================================
+             FARMER NAVIGATION
+          ================================== */
 
-              </li>
+          <>
 
-              
+            {/* Dashboard */}
 
-              <li>
+            <li>
 
-                <button
+              <Link
+                to="/farmer-dashboard"
+                className={
+                  location.pathname ===
+                  "/farmer-dashboard"
+                    ? "active"
+                    : ""
+                }
+              >
+                Dashboard
+              </Link>
 
-                  className={`nav-btn ${
+            </li>
 
-                    activeSection === "datasets"
 
-                      ? "active"
+            {/* Analytics */}
 
-                      : ""
+            <li>
 
-                  }`}
+              <Link
+                to="/farmer-analytics"
+                className={
+                  location.pathname ===
+                  "/farmer-analytics"
+                    ? "active"
+                    : ""
+                }
+              >
+                Analytics
+              </Link>
 
-                  onClick={() =>
+            </li>
 
-                    setActiveSection("datasets")
 
-                  }
+            {/* Reports */}
 
-                >
+            <li>
 
-                  Datasets
+              <Link
+                to="/farmer-reports"
+                className={
+                  location.pathname ===
+                  "/farmer-reports"
+                    ? "active"
+                    : ""
+                }
+              >
+                Reports
+              </Link>
 
-                </button>
+            </li>
 
-              </li>
 
-              <li>
+            {/* Weather */}
 
-                <button
+            <li>
 
-                  className={`nav-btn ${
+              <WeatherDropdown />
 
-                    activeSection === "analytics"
+            </li>
 
-                      ? "active"
 
-                      : ""
+            {/* User Profile */}
 
-                  }`}
+            <li>
 
-                  onClick={() =>
+              <Link
+                className="profile-link"
+                to="#"
+              >
 
-                    setActiveSection("analytics")
+                <User size={18} />
 
-                  }
+                {userName}
 
-                >
+              </Link>
 
-                  Analytics
+            </li>
 
-                </button>
 
-              </li>
+            {/* Logout */}
 
-              <li>
+            <li>
 
-                <div className="admin-user">
+              <button
+                className="logout-btn"
+                onClick={handleLogout}
+              >
 
-                  <User size={18} />
+                <LogOut size={18} />
 
-                  <span>{userName}</span>
+                Log Out
 
-                </div>
+              </button>
 
-              </li>
+            </li>
 
-              <li>
+          </>
 
-                <button
-
-                  className="logout-btn"
-
-                  onClick={handleLogout}
-
-                >
-
-                  <LogOut size={18} />
-
-                  Logout
-
-                </button>
-
-              </li>
-
-            </>
-
-          ) : (
-
-            <>
-
-  <li>
-    <WeatherDropdown />
-  </li>
-  
-
-  <li>
-    <Link className="profile-link" to="#">
-      <User size={18} />
-      {userName}
-    </Link>
-  </li>
-
-  <li>
-    <button
-      className="logout-btn"
-      onClick={handleLogout}
-    >
-      <LogOut size={18} />
-      Log Out
-    </button>
-  </li>
-</>
-
-          )
 
         ) : (
 
+          /* ==================================
+             PUBLIC NAVIGATION
+          ================================== */
+
           <>
+
+            {/* About */}
 
             <li>
 
               <Link to="/about">
-
                 About
-
               </Link>
 
             </li>
 
+
+            {/* Login */}
+
             <li>
 
               <Link
-
                 className="login-btn"
-
                 to="/"
-
               >
-
                 Login
-
               </Link>
 
             </li>
 
+
+            {/* Signup */}
+
             <li>
 
               <Link
-
                 className="signup-btn"
-
                 to="/signup"
-
               >
-
                 Sign Up
-
               </Link>
 
             </li>
@@ -336,5 +448,6 @@ function Navbar({
   );
 
 }
+
 
 export default Navbar;

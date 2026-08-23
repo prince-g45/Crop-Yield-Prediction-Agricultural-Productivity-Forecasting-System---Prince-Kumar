@@ -2,6 +2,7 @@ import os
 import requests
 from dotenv import load_dotenv
 
+
 # ==========================================
 # Environment
 # ==========================================
@@ -36,21 +37,32 @@ def test_gemini():
         ]
     }
 
-    response = requests.post(
-        URL,
-        headers={
-            "Content-Type": "application/json"
-        },
-        json=payload,
-        timeout=60
-    )
+    try:
 
-    print("Status Code:", response.status_code)
-    print(response.text)
+        response = requests.post(
+            URL,
+            headers={
+                "Content-Type": "application/json"
+            },
+            json=payload,
+            timeout=60
+        )
 
-    response.raise_for_status()
+        print("Status Code:", response.status_code)
+        print(response.text)
 
-    return response.json()
+        response.raise_for_status()
+
+        return response.json()
+
+    except requests.exceptions.RequestException as error:
+
+        print(
+            "Gemini connection failed:",
+            error
+        )
+
+        return None
 
 
 # ==========================================
@@ -152,20 +164,197 @@ Return ONLY valid JSON in this exact structure:
         }
     }
 
-    response = requests.post(
-        URL,
-        headers={
-            "Content-Type": "application/json"
-        },
-        json=payload,
-        timeout=60
-    )
 
-    response.raise_for_status()
+    # ==========================================
+    # GEMINI REQUEST
+    # ==========================================
 
-    result = response.json()
+    try:
 
-    # Gemini response text
-    text = result["candidates"][0]["content"]["parts"][0]["text"]
+        response = requests.post(
+            URL,
+            headers={
+                "Content-Type": "application/json"
+            },
+            json=payload,
+            timeout=60
+        )
 
-    return text
+
+        # ======================================
+        # HANDLE SERVER ERROR
+        # ======================================
+
+        if response.status_code == 503:
+
+            print(
+                "Gemini service temporarily unavailable."
+            )
+
+            return (
+                "AI agricultural report is temporarily "
+                "unavailable. Your crop prediction, "
+                "weather analysis and soil analysis "
+                "are still available."
+            )
+
+
+        # ======================================
+        # HANDLE RATE LIMIT
+        # ======================================
+
+        if response.status_code == 429:
+
+            print(
+                "Gemini API rate limit reached."
+            )
+
+            return (
+                "AI agricultural report is temporarily "
+                "unavailable because the AI service "
+                "rate limit was reached."
+            )
+
+
+        # ======================================
+        # HANDLE OTHER HTTP ERRORS
+        # ======================================
+
+        if not response.ok:
+
+            print(
+                "Gemini API error:",
+                response.status_code
+            )
+
+            print(
+                "Gemini response:",
+                response.text
+            )
+
+            return (
+                "AI agricultural report is currently "
+                "unavailable."
+            )
+
+
+        # ======================================
+        # PARSE RESPONSE
+        # ======================================
+
+        result = response.json()
+
+
+        candidates = result.get(
+            "candidates",
+            []
+        )
+
+
+        if not candidates:
+
+            print(
+                "Gemini returned no candidates."
+            )
+
+            return (
+                "AI agricultural report could not "
+                "be generated."
+            )
+
+
+        content = candidates[0].get(
+            "content",
+            {}
+        )
+
+
+        parts = content.get(
+            "parts",
+            []
+        )
+
+
+        if not parts:
+
+            print(
+                "Gemini returned empty content."
+            )
+
+            return (
+                "AI agricultural report could not "
+                "be generated."
+            )
+
+
+        text = parts[0].get(
+            "text",
+            ""
+        )
+
+
+        if not text:
+
+            return (
+                "AI agricultural report could not "
+                "be generated."
+            )
+
+
+        return text
+
+
+    # ==========================================
+    # CONNECTION ERROR
+    # ==========================================
+
+    except requests.exceptions.Timeout:
+
+        print(
+            "Gemini request timed out."
+        )
+
+        return (
+            "AI agricultural report is temporarily "
+            "unavailable because the AI request "
+            "timed out."
+        )
+
+
+    except requests.exceptions.ConnectionError:
+
+        print(
+            "Unable to connect to Gemini."
+        )
+
+        return (
+            "AI agricultural report is temporarily "
+            "unavailable because the AI service "
+            "could not be reached."
+        )
+
+
+    except requests.exceptions.RequestException as error:
+
+        print(
+            "Gemini request failed:",
+            error
+        )
+
+        return (
+            "AI agricultural report is temporarily "
+            "unavailable."
+        )
+
+
+    except Exception as error:
+
+        print(
+            "Unexpected Gemini error:",
+            error
+        )
+
+        return (
+            "AI agricultural report could not "
+            "be generated."
+        )

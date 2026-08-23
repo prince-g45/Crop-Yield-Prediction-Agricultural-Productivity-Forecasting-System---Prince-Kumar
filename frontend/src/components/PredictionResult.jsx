@@ -75,6 +75,7 @@ function PredictionResult({
         {result && (
 
           <button
+            type="button"
             className="new-prediction-btn"
             onClick={onNewPrediction}
           >

@@ -17,6 +17,10 @@ body,
     padding: 0;
 }
 
+html {
+    overflow-x: hidden;
+}
+
 body {
     font-family: "Segoe UI", Arial, sans-serif;
     overflow-x: hidden;
@@ -34,12 +38,12 @@ body {
     width: 100%;
 
     /*
-      Navbar is fixed and 70px high.
-      Start the signup page below it.
+       Navbar fixed hai aur 70px high hai.
+       Signup page navbar ke exactly neeche start hoga.
     */
-    margin-top: 100px;
+    margin-top: 60px;
 
-    min-height: calc(100vh - 100px);
+    min-height: calc(100vh - 70px);
 
     display: flex;
 
@@ -47,7 +51,10 @@ body {
 
     justify-content: center;
 
-    padding: 20px 20px 24px;
+    /*
+       Card aur navbar ke beech proper spacing
+    */
+    padding: 35px 20px 50px;
 
     isolation: isolate;
 
@@ -60,7 +67,9 @@ body {
         url("../assets/background.jpg");
 
     background-size: cover;
-    background-position: center;
+
+    background-position: center center;
+
     background-repeat: no-repeat;
 
     overflow: hidden;
@@ -143,9 +152,12 @@ body {
     z-index: 2;
 
     width: 850px;
+
     max-width: 94vw;
 
     padding: 20px 28px 18px;
+
+    margin: 0;
 
     border-radius: 22px;
 
@@ -340,7 +352,7 @@ body {
 
     margin: 0 0 5px;
 
-    color: rgba(255, 255, 255, 0.96);
+    color: rgba(161, 155, 155, 0.96);
 
     font-size: 12px;
 
@@ -380,7 +392,7 @@ body {
         inset 0 1px 0 rgba(255, 255, 255, 0.80),
         0 5px 16px rgba(0, 0, 0, 0.08);
 
-    color: #263238;
+    color: #050708;
 
     font-family: inherit;
 
@@ -412,6 +424,7 @@ body {
 
 .form-group input::placeholder {
     color: #9aa3aa;
+
     opacity: 1;
 }
 
@@ -473,7 +486,8 @@ body {
 }
 
 .form-group select option {
-    color: #263238;
+    color: #050708;
+
     background: #ffffff;
 }
 
@@ -772,7 +786,7 @@ body {
 
         min-height: calc(100vh - 70px);
 
-        padding: 14px 20px 16px;
+        padding: 25px 20px 35px;
     }
 
     .signup-card {
@@ -789,6 +803,7 @@ body {
         font-size: 9px;
 
         margin-top: 2px;
+
         margin-bottom: 4px;
     }
 
@@ -838,9 +853,10 @@ body {
 
         min-height: calc(100vh - 70px);
 
-        padding: 18px 15px 22px;
+        padding: 25px 15px 35px;
 
         overflow-x: hidden;
+
         overflow-y: auto;
     }
 
@@ -879,7 +895,11 @@ body {
 
         min-height: calc(100vh - 64px);
 
-        padding: 15px 12px 20px;
+        padding: 25px 12px 35px;
+
+        overflow-x: hidden;
+
+        overflow-y: auto;
     }
 
     .signup-card {
@@ -958,8 +978,9 @@ body {
 
         min-height: calc(100vh - 70px);
 
-        padding-top: 10px;
-        padding-bottom: 12px;
+        padding-top: 18px;
+
+        padding-bottom: 25px;
     }
 
     .signup-card {

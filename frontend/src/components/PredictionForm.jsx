@@ -13,10 +13,6 @@ function PredictionForm({
   setRefreshHistory,
 }) {
 
-  // ===========================
-  // Initial Form Data
-  // ===========================
-
   const initialFormData = {
     farm_name: "",
     crop: "",
@@ -32,9 +28,10 @@ function PredictionForm({
   const [seasons, setSeasons] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // ===========================
-  // Load Metadata
-  // ===========================
+
+  // ==========================================
+  // LOAD METADATA
+  // ==========================================
 
   useEffect(() => {
 
@@ -61,9 +58,10 @@ function PredictionForm({
 
   }, []);
 
-  // ===========================
-  // Reset Form
-  // ===========================
+
+  // ==========================================
+  // RESET
+  // ==========================================
 
   useEffect(() => {
 
@@ -77,22 +75,24 @@ function PredictionForm({
 
   }, [resetForm, setResetForm]);
 
-  // ===========================
-  // Handle Change
-  // ===========================
+
+  // ==========================================
+  // HANDLE CHANGE
+  // ==========================================
 
   const handleChange = (e) => {
 
-    setFormData({
-      ...formData,
+    setFormData((previousData) => ({
+      ...previousData,
       [e.target.name]: e.target.value,
-    });
+    }));
 
   };
 
-  // ===========================
-  // Predict
-  // ===========================
+
+  // ==========================================
+  // PREDICT
+  // ==========================================
 
   const handlePredict = async (e) => {
 
@@ -128,10 +128,8 @@ function PredictionForm({
 
           const result = await predictYield(payload);
 
-          // Update Hero Card + Summary
           setPredictionResult(result);
 
-          // Refresh History Table
           if (setRefreshHistory) {
             setRefreshHistory(true);
           }
@@ -162,22 +160,41 @@ function PredictionForm({
 
   };
 
+
+  // ==========================================
+  // UI
+  // ==========================================
+
   return (
 
-    <div className="prediction-card">
+    <div className="yield-prediction-card">
 
-      <h2>Crop Yield Prediction</h2>
+      <div className="yield-prediction-header">
+
+        <h2>Crop Yield Prediction</h2>
+
+        <p>
+          Enter your farm details to estimate crop yield.
+        </p>
+
+      </div>
+
 
       <form
-        className="prediction-form"
+        className="yield-prediction-form"
         onSubmit={handlePredict}
       >
 
-        <div className="form-group">
+        {/* FARM NAME */}
 
-          <label>Farm Name</label>
+        <div className="yield-form-group">
+
+          <label htmlFor="farm_name">
+            Farm Name
+          </label>
 
           <input
+            id="farm_name"
             type="text"
             name="farm_name"
             placeholder="Enter Farm Name"
@@ -188,18 +205,26 @@ function PredictionForm({
 
         </div>
 
-        <div className="form-group">
 
-          <label>Crop</label>
+        {/* CROP */}
+
+        <div className="yield-form-group">
+
+          <label htmlFor="crop">
+            Crop
+          </label>
 
           <select
+            id="crop"
             name="crop"
             value={formData.crop}
             onChange={handleChange}
             required
           >
 
-            <option value="">Select Crop</option>
+            <option value="">
+              Select Crop
+            </option>
 
             {crops.map((crop) => (
 
@@ -216,18 +241,26 @@ function PredictionForm({
 
         </div>
 
-        <div className="form-group">
 
-          <label>Season</label>
+        {/* SEASON */}
+
+        <div className="yield-form-group">
+
+          <label htmlFor="season">
+            Season
+          </label>
 
           <select
+            id="season"
             name="season"
             value={formData.season}
             onChange={handleChange}
             required
           >
 
-            <option value="">Select Season</option>
+            <option value="">
+              Select Season
+            </option>
 
             {seasons.map((season) => (
 
@@ -244,11 +277,17 @@ function PredictionForm({
 
         </div>
 
-        <div className="form-group">
 
-          <label>Area (ha)</label>
+        {/* AREA */}
+
+        <div className="yield-form-group">
+
+          <label htmlFor="area">
+            Area (ha)
+          </label>
 
           <input
+            id="area"
             type="number"
             name="area"
             step="0.01"
@@ -260,11 +299,17 @@ function PredictionForm({
 
         </div>
 
-        <div className="form-group">
 
-          <label>Fertilizer (kg)</label>
+        {/* FERTILIZER */}
+
+        <div className="yield-form-group">
+
+          <label htmlFor="fertilizer">
+            Fertilizer (kg)
+          </label>
 
           <input
+            id="fertilizer"
             type="number"
             name="fertilizer"
             step="0.01"
@@ -276,11 +321,17 @@ function PredictionForm({
 
         </div>
 
-        <div className="form-group">
 
-          <label>Pesticide (kg)</label>
+        {/* PESTICIDE */}
+
+        <div className="yield-form-group">
+
+          <label htmlFor="pesticide">
+            Pesticide (kg)
+          </label>
 
           <input
+            id="pesticide"
             type="number"
             name="pesticide"
             step="0.01"
@@ -292,12 +343,19 @@ function PredictionForm({
 
         </div>
 
+
+        {/* BUTTON */}
+
         <button
           type="submit"
-          className="predict-btn"
+          className="yield-predict-btn"
           disabled={loading}
         >
-          {loading ? "Predicting..." : "Predict Yield"}
+
+          {loading
+            ? "Predicting..."
+            : "Predict Yield"}
+
         </button>
 
       </form>

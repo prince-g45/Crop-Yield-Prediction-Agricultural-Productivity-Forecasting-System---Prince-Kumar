@@ -1,0 +1,1625 @@
+/* =========================================================
+   FARMER REPORTS PAGE
+========================================================= */
+
+.reports-page {
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #f4f7f5;
+
+    color: #26352c;
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.reports-container {
+    width: min(1180px, 92%);
+
+    margin: 0 auto;
+
+    padding: 105px 0 60px;
+
+    flex: 1;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.reports-header {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 25px;
+
+    margin-bottom: 25px;
+}
+
+.reports-eyebrow,
+.section-label {
+    display: block;
+
+    color: #4d8b59;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.4px;
+
+    text-transform: uppercase;
+}
+
+.reports-header h1 {
+    margin: 6px 0 0;
+
+    color: #173d25;
+
+    font-size: 34px;
+
+    font-weight: 700;
+
+    letter-spacing: -0.5px;
+}
+
+.reports-header p {
+    max-width: 620px;
+
+    margin: 8px 0 0;
+
+    color: #6d7871;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+.reports-count {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 10px 14px;
+
+    background: #ffffff;
+
+    border: 1px solid #dfe7e1;
+
+    border-radius: 10px;
+
+    color: #2e7d32;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   SELECTOR
+========================================================= */
+
+.report-selector {
+    padding: 21px 22px;
+
+    margin-bottom: 20px;
+
+    background: #ffffff;
+
+    border: 1px solid #e0e7e2;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 3px 12px rgba(24, 55, 35, 0.04);
+}
+
+.selector-header {
+    margin-bottom: 16px;
+}
+
+.selector-header h2 {
+    margin: 5px 0 0;
+
+    color: #20392a;
+
+    font-size: 19px;
+}
+
+.selector-header p {
+    margin: 5px 0 0;
+
+    color: #78827b;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   PREDICTION LIST
+========================================================= */
+
+.prediction-list {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(230px, 1fr));
+
+    gap: 10px;
+}
+
+.prediction-item {
+    width: 100%;
+
+    min-width: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 14px;
+
+    background: #fafcfb;
+
+    border: 1px solid #e1e8e2;
+
+    border-radius: 10px;
+
+    color: #26332b;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.prediction-item:hover {
+    background: #f2f8f3;
+
+    border-color: #b9d8be;
+
+    transform: translateY(-1px);
+}
+
+.prediction-item.selected {
+    background: #edf7ef;
+
+    border: 2px solid #2e7d32;
+}
+
+.prediction-item-main {
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+.prediction-item-main strong {
+    overflow: hidden;
+
+    color: #26332b;
+
+    font-size: 14px;
+
+    font-weight: 650;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+.prediction-item-main span {
+    color: #7a837d;
+
+    font-size: 11px;
+}
+
+.prediction-item-details {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    gap: 4px;
+
+    flex-shrink: 0;
+
+    white-space: nowrap;
+}
+
+.prediction-item-details span {
+    color: #7a837d;
+
+    font-size: 11px;
+}
+
+.prediction-item-details strong {
+    color: #2e7d32;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   REPORT CONTENT
+========================================================= */
+
+.report-content {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+}
+
+
+/* =========================================================
+   REPORT TITLE
+========================================================= */
+
+.report-title {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 21px 23px;
+
+    background: #ffffff;
+
+    border: 1px solid #dfe7e1;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 3px 12px rgba(24, 55, 35, 0.04);
+}
+
+.report-title-info {
+    min-width: 0;
+}
+
+.report-title h2 {
+    margin: 5px 0 0;
+
+    color: #173d25;
+
+    font-size: 23px;
+
+    font-weight: 700;
+}
+
+.report-title p {
+    margin: 6px 0 0;
+
+    color: #778179;
+
+    font-size: 12px;
+}
+
+.report-date {
+    min-width: 150px;
+
+    padding: 11px 14px;
+
+    background: #f5f9f6;
+
+    border: 1px solid #e1e9e2;
+
+    border-radius: 9px;
+
+    text-align: right;
+}
+
+.report-date span {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #849087;
+
+    font-size: 9px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.8px;
+}
+
+.report-date strong {
+    color: #2e7d32;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   KPI
+========================================================= */
+
+.report-overview {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 13px;
+}
+
+.overview-card {
+    min-width: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 17px;
+
+    background: #ffffff;
+
+    border: 1px solid #e1e7e2;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 2px 8px rgba(24, 55, 35, 0.035);
+}
+
+.overview-icon {
+    width: 40px;
+
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    background: #edf7ef;
+
+    border-radius: 9px;
+
+    color: #2e7d32;
+}
+
+.overview-card span {
+    display: block;
+
+    color: #707b73;
+
+    font-size: 11px;
+}
+
+.overview-card strong {
+    display: block;
+
+    overflow: hidden;
+
+    margin-top: 4px;
+
+    color: #267a35;
+
+    font-size: 21px;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+.overview-card small {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #89928c;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   RISK KPI
+========================================================= */
+
+.risk-overview.low {
+    border-color: #a9d8b0;
+
+    background: #f4fbf5;
+}
+
+.risk-overview.low .overview-icon {
+    background: #dff2e2;
+
+    color: #188038;
+}
+
+.risk-overview.low strong {
+    color: #188038;
+}
+
+
+.risk-overview.medium {
+    border-color: #ead18d;
+
+    background: #fffaf0;
+}
+
+.risk-overview.medium .overview-icon {
+    background: #fff0c9;
+
+    color: #a66a00;
+}
+
+.risk-overview.medium strong {
+    color: #a66a00;
+}
+
+
+.risk-overview.high {
+    border-color: #e4a6a6;
+
+    background: #fff5f5;
+}
+
+.risk-overview.high .overview-icon {
+    background: #fbe0e0;
+
+    color: #c62828;
+}
+
+.risk-overview.high strong {
+    color: #c62828;
+}
+
+
+/* =========================================================
+   COMMON CARD
+========================================================= */
+
+.report-card {
+    padding: 22px 24px;
+
+    background: #ffffff;
+
+    border: 1px solid #dfe7e1;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 3px 12px rgba(24, 55, 35, 0.04);
+}
+
+.report-card-heading {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 17px;
+}
+
+.report-card-heading h3 {
+    margin: 5px 0 0;
+
+    color: #20392a;
+
+    font-size: 19px;
+
+    font-weight: 700;
+}
+
+.report-card-heading p {
+    margin: 5px 0 0;
+
+    color: #78827b;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+.chart-unit {
+    padding: 6px 10px;
+
+    background: #edf7ef;
+
+    border-radius: 7px;
+
+    color: #2e7d32;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   CHART EXPLANATION
+========================================================= */
+
+.chart-explanation {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 12px;
+
+    margin-bottom: 15px;
+}
+
+.chart-explanation > div {
+    padding: 13px 15px;
+
+    background: #f7faf7;
+
+    border: 1px solid #e3eae4;
+
+    border-radius: 10px;
+}
+
+.chart-explanation span {
+    display: block;
+
+    color: #727d75;
+
+    font-size: 11px;
+}
+
+.chart-explanation strong {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #2e7d32;
+
+    font-size: 19px;
+}
+
+.chart-explanation small {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #7b857e;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   CHARTS
+========================================================= */
+
+.chart-container {
+    width: 100%;
+
+    overflow: hidden;
+}
+
+.yield-chart {
+    height: 315px;
+}
+
+.soil-chart {
+    height: 300px;
+}
+
+
+/* =========================================================
+   RECHARTS
+========================================================= */
+
+.recharts-wrapper {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.recharts-cartesian-axis-tick-value {
+    fill: #647067;
+}
+
+.recharts-cartesian-grid-horizontal line {
+    stroke: #e5ebe6;
+}
+
+.recharts-cartesian-grid-vertical line {
+    stroke: transparent;
+}
+
+
+/* =========================================================
+   TOOLTIP
+========================================================= */
+
+.report-chart-tooltip {
+    min-width: 140px;
+
+    padding: 11px 13px;
+
+    background: #ffffff;
+
+    border: 1px solid #dfe7e1;
+
+    border-radius: 9px;
+
+    box-shadow:
+        0 8px 22px rgba(24, 55, 35, 0.12);
+}
+
+.report-chart-tooltip > strong {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #263b2d;
+
+    font-size: 12px;
+}
+
+.tooltip-row {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 4px;
+}
+
+.tooltip-row span {
+    color: #747e77;
+
+    font-size: 10px;
+}
+
+.tooltip-row strong {
+    color: #2e7d32;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   WEATHER
+========================================================= */
+
+.weather-metrics {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 12px;
+}
+
+.weather-metric {
+    padding: 17px;
+
+    background: #f8faf8;
+
+    border: 1px solid #e3e9e4;
+
+    border-radius: 11px;
+}
+
+.weather-icon {
+    width: 34px;
+
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-bottom: 11px;
+
+    background: #edf7ef;
+
+    border-radius: 8px;
+
+    color: #3f8f4c;
+}
+
+.weather-metric span {
+    display: block;
+
+    color: #737e76;
+
+    font-size: 11px;
+}
+
+.weather-metric strong {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #2e7d32;
+
+    font-size: 21px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   SOIL
+========================================================= */
+
+.soil-values {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 10px;
+
+    margin-top: 13px;
+}
+
+.soil-value {
+    padding: 13px;
+
+    background: #f8faf8;
+
+    border: 1px solid #e2e9e3;
+
+    border-radius: 9px;
+
+    text-align: center;
+}
+
+.soil-value span {
+    display: block;
+
+    color: #737e76;
+
+    font-size: 10px;
+}
+
+.soil-value strong {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #2e7d32;
+
+    font-size: 18px;
+}
+
+.soil-details {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+
+    margin-top: 11px;
+}
+
+.soil-details > div {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 13px 15px;
+
+    background: #f2f8f3;
+
+    border: 1px solid #dce9de;
+
+    border-radius: 9px;
+}
+
+.soil-details span {
+    color: #6f7972;
+
+    font-size: 11px;
+}
+
+.soil-details strong {
+    color: #2e7d32;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   RISK SECTION
+========================================================= */
+
+.risk-section {
+    border-color: #d9e4db;
+}
+
+.overall-risk {
+    min-width: 105px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 9px 13px;
+
+    border-radius: 10px;
+}
+
+.overall-risk span {
+    font-size: 9px;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.7px;
+}
+
+.overall-risk strong {
+    margin-top: 3px;
+
+    font-size: 15px;
+}
+
+.overall-risk.low {
+    background: #e8f7eb;
+
+    border: 1px solid #8fd19e;
+
+    color: #188038;
+}
+
+.overall-risk.medium {
+    background: #fff4d6;
+
+    border: 1px solid #e5c46a;
+
+    color: #a66a00;
+}
+
+.overall-risk.high {
+    background: #fde8e8;
+
+    border: 1px solid #e3a0a0;
+
+    color: #c62828;
+}
+
+.overall-risk.review {
+    background: #eef1ef;
+
+    border: 1px solid #d5ddd7;
+
+    color: #657068;
+}
+
+
+/* =========================================================
+   RISK CARDS
+========================================================= */
+
+.risk-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 13px;
+}
+
+.risk-card {
+    padding: 17px;
+
+    border-radius: 11px;
+
+    border: 1px solid #dfe5e1;
+}
+
+.risk-card-top {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+.risk-card-top span {
+    color: #536158;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+.risk-status-dot {
+    width: 9px;
+
+    height: 9px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+}
+
+.risk-card strong {
+    display: block;
+
+    margin-top: 11px;
+
+    font-size: 22px;
+
+    font-weight: 700;
+}
+
+.risk-card small {
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 10px;
+}
+
+
+/* LOW */
+
+.risk-card.low {
+    background: #eef9f0;
+
+    border-color: #a9d8b0;
+}
+
+.risk-card.low strong {
+    color: #188038;
+}
+
+.risk-card.low small {
+    color: #4c7955;
+}
+
+.risk-card.low .risk-status-dot {
+    background: #188038;
+}
+
+
+/* MEDIUM */
+
+.risk-card.medium {
+    background: #fff8e8;
+
+    border-color: #e7cc7c;
+}
+
+.risk-card.medium strong {
+    color: #a66a00;
+}
+
+.risk-card.medium small {
+    color: #866b31;
+}
+
+.risk-card.medium .risk-status-dot {
+    background: #c48a08;
+}
+
+
+/* HIGH */
+
+.risk-card.high {
+    background: #fff0f0;
+
+    border-color: #e3a0a0;
+}
+
+.risk-card.high strong {
+    color: #c62828;
+}
+
+.risk-card.high small {
+    color: #8d5050;
+}
+
+.risk-card.high .risk-status-dot {
+    background: #c62828;
+}
+
+
+/* REVIEW */
+
+.risk-card.review {
+    background: #f5f7f6;
+
+    border-color: #dfe5e1;
+}
+
+.risk-card.review strong {
+    color: #657068;
+}
+
+.risk-card.review small {
+    color: #7b837d;
+}
+
+.risk-card.review .risk-status-dot {
+    background: #7b837d;
+}
+
+
+/* =========================================================
+   RISK LEGEND
+========================================================= */
+
+.risk-legend {
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    margin-top: 15px;
+
+    padding-top: 12px;
+
+    border-top: 1px solid #edf1ee;
+}
+
+.risk-legend span {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    color: #737d76;
+
+    font-size: 10px;
+}
+
+.risk-dot {
+    width: 7px;
+
+    height: 7px;
+
+    border-radius: 50%;
+}
+
+.low-dot {
+    background: #188038;
+}
+
+.medium-dot {
+    background: #c48a08;
+}
+
+.high-dot {
+    background: #c62828;
+}
+
+
+/* =========================================================
+   RECOMMENDATIONS
+========================================================= */
+
+.recommendation-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 11px;
+}
+
+.recommendation-card {
+    display: flex;
+
+    gap: 12px;
+
+    padding: 16px;
+
+    background: #f7faf7;
+
+    border: 1px solid #dfe8e0;
+
+    border-left: 3px solid #4f8b5b;
+
+    border-radius: 10px;
+}
+
+.recommendation-number {
+    width: 30px;
+
+    height: 30px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    background: #e5f1e7;
+
+    border-radius: 7px;
+
+    color: #347b42;
+
+    font-size: 9px;
+
+    font-weight: 700;
+}
+
+.recommendation-card h4 {
+    margin: 0;
+
+    color: #2c4634;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+.recommendation-card p {
+    margin: 6px 0 0;
+
+    color: #5f6c63;
+
+    font-size: 11px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   FINAL SUMMARY
+========================================================= */
+
+.report-summary {
+    padding: 23px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #edf7ef,
+            #f8fbf8
+        );
+
+    border: 1px solid #cfe1d2;
+
+    border-radius: 14px;
+}
+
+.report-summary h3 {
+    margin: 5px 0 17px;
+
+    color: #203c29;
+
+    font-size: 20px;
+}
+
+.summary-grid-report {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 10px;
+}
+
+.summary-grid-report > div {
+    padding: 13px;
+
+    background: rgba(
+        255,
+        255,
+        255,
+        0.78
+    );
+
+    border: 1px solid #dce8de;
+
+    border-radius: 9px;
+}
+
+.summary-grid-report span {
+    display: block;
+
+    color: #758078;
+
+    font-size: 10px;
+}
+
+.summary-grid-report strong {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #2e7d32;
+
+    font-size: 13px;
+}
+
+.summary-risk.low strong {
+    color: #188038;
+}
+
+.summary-risk.medium strong {
+    color: #a66a00;
+}
+
+.summary-risk.high strong {
+    color: #c62828;
+}
+
+.summary-risk.review strong {
+    color: #657068;
+}
+
+.report-final-text {
+    margin: 17px 0 0;
+
+    padding-top: 15px;
+
+    border-top: 1px solid #d7e5d9;
+
+    color: #45564b;
+
+    font-size: 12px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   EMPTY / ERROR
+========================================================= */
+
+.empty-report {
+    min-height: 380px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 45px 25px;
+
+    background: #ffffff;
+
+    border: 1px solid #e1e7e2;
+
+    border-radius: 14px;
+
+    text-align: center;
+}
+
+.empty-report svg {
+    margin-bottom: 14px;
+
+    color: #4f925a;
+}
+
+.empty-report h2 {
+    margin: 0;
+
+    color: #2e7d32;
+
+    font-size: 21px;
+}
+
+.empty-report p {
+    max-width: 500px;
+
+    margin: 8px auto 0;
+
+    color: #777;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.reports-loading {
+    min-height: 430px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 13px;
+}
+
+.reports-loading p {
+    margin: 0;
+
+    color: #68736c;
+
+    font-size: 13px;
+}
+
+.loading-spinner {
+    width: 38px;
+
+    height: 38px;
+
+    border: 4px solid #e5f0e6;
+
+    border-top-color: #2e7d32;
+
+    border-radius: 50%;
+
+    animation:
+        report-spin
+        0.8s
+        linear
+        infinite;
+}
+
+@keyframes report-spin {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.reports-page > .footer {
+    width: 100%;
+
+    margin-top: auto;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .report-overview {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .summary-grid-report {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+/* =========================================================
+   SMALL TABLET
+========================================================= */
+
+@media (max-width: 750px) {
+
+    .reports-container {
+        width: 94%;
+
+        padding-top: 90px;
+    }
+
+    .reports-header {
+        flex-direction: column;
+
+        gap: 14px;
+    }
+
+    .reports-count {
+        align-self: flex-start;
+    }
+
+    .report-title {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .report-date {
+        width: 100%;
+
+        text-align: left;
+    }
+
+    .chart-explanation {
+        grid-template-columns: 1fr;
+    }
+
+    .weather-metrics {
+        grid-template-columns: 1fr;
+    }
+
+    .risk-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .recommendation-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .soil-details {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .reports-container {
+        width: 94%;
+
+        padding:
+            88px
+            0
+            45px;
+    }
+
+    .reports-header h1 {
+        font-size: 27px;
+    }
+
+    .reports-header p {
+        font-size: 13px;
+    }
+
+    .report-selector {
+        padding: 17px;
+    }
+
+    .prediction-list {
+        grid-template-columns: 1fr;
+    }
+
+    .report-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .report-card {
+        padding: 18px;
+    }
+
+    .report-card-heading {
+        flex-direction: column;
+
+        gap: 9px;
+    }
+
+    .report-card-heading h3 {
+        font-size: 17px;
+    }
+
+    .yield-chart {
+        height: 285px;
+    }
+
+    .soil-chart {
+        height: 270px;
+    }
+
+    .soil-values {
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+    .summary-grid-report {
+        grid-template-columns: 1fr;
+    }
+
+    .report-summary {
+        padding: 19px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+
+    .reports-container {
+        width: 95%;
+    }
+
+    .prediction-item {
+        padding: 13px;
+    }
+
+    .report-title h2 {
+        font-size: 21px;
+    }
+
+    .overview-card strong {
+        font-size: 21px;
+    }
+
+    .soil-values {
+        grid-template-columns: 1fr;
+    }
+
+    .yield-chart {
+        height: 260px;
+    }
+
+}

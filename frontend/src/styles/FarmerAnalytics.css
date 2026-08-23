@@ -1,0 +1,886 @@
+/* =========================================================
+   FARMER ANALYTICS PAGE
+========================================================= */
+
+.farmer-analytics-page {
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #f4f7f5;
+
+    color: #26352c;
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+========================================================= */
+
+.analytics-container {
+    width: min(1180px, 92%);
+
+    margin: 0 auto;
+
+    padding: 105px 0 60px;
+
+    flex: 1;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.analytics-header {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 25px;
+
+    margin-bottom: 28px;
+}
+
+.analytics-label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #4d8b59;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+}
+
+.analytics-header h1 {
+    margin: 0;
+
+    color: #173d25;
+
+    font-size: 34px;
+
+    font-weight: 700;
+
+    letter-spacing: -0.5px;
+}
+
+.analytics-header p {
+    max-width: 600px;
+
+    margin: 8px 0 0;
+
+    color: #6d7871;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+.analytics-header-badge {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 10px 14px;
+
+    background: #ffffff;
+
+    border: 1px solid #dfe7e1;
+
+    border-radius: 10px;
+
+    color: #2e7d32;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+.analytics-header-badge svg {
+    color: #3f8f4c;
+}
+
+
+/* =========================================================
+   PERFORMANCE OVERVIEW
+========================================================= */
+
+.analytics-overview {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 14px;
+
+    margin-bottom: 20px;
+}
+
+.analytics-kpi-card {
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    min-width: 0;
+
+    padding: 18px;
+
+    background: #ffffff;
+
+    border: 1px solid #e0e7e2;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 3px 10px rgba(24, 55, 35, 0.035);
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.analytics-kpi-card:hover {
+    transform: translateY(-2px);
+
+    border-color: #cbdccc;
+
+    box-shadow:
+        0 7px 18px rgba(24, 55, 35, 0.07);
+}
+
+.kpi-icon {
+    width: 42px;
+
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    background: #edf7ef;
+
+    border-radius: 10px;
+
+    color: #2e7d32;
+}
+
+.kpi-content {
+    min-width: 0;
+}
+
+.kpi-content span {
+    display: block;
+
+    color: #727c75;
+
+    font-size: 11px;
+
+    font-weight: 500;
+}
+
+.kpi-content strong {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #267a35;
+
+    font-size: 23px;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+
+    white-space: nowrap;
+}
+
+.kpi-content small {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #909891;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   COMMON CARD
+========================================================= */
+
+.analytics-card {
+    background: #ffffff;
+
+    border: 1px solid #dfe7e1;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 3px 12px rgba(24, 55, 35, 0.04);
+}
+
+
+/* =========================================================
+   SECTION HEADING
+========================================================= */
+
+.analytics-section-heading {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 18px;
+}
+
+.section-kicker {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #579161;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.2px;
+
+    text-transform: uppercase;
+}
+
+.analytics-section-heading h2 {
+    margin: 0;
+
+    color: #20392a;
+
+    font-size: 19px;
+
+    font-weight: 700;
+}
+
+.analytics-section-heading p {
+    margin: 5px 0 0;
+
+    color: #78827b;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+.analytics-section-heading > svg {
+    flex-shrink: 0;
+
+    margin-top: 4px;
+
+    color: #4d9259;
+}
+
+
+/* =========================================================
+   CHART UNIT
+========================================================= */
+
+.chart-unit {
+    padding: 6px 10px;
+
+    background: #edf7ef;
+
+    border-radius: 7px;
+
+    color: #2e7d32;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   MAIN YIELD PERFORMANCE
+========================================================= */
+
+.analytics-main-chart {
+    padding: 22px 24px;
+
+    margin-bottom: 20px;
+}
+
+.chart-container {
+    width: 100%;
+
+    overflow: hidden;
+}
+
+.chart-large {
+    min-height: 340px;
+}
+
+
+/* =========================================================
+   CHART GRID
+========================================================= */
+
+.analytics-chart-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+
+    margin-bottom: 20px;
+}
+
+.analytics-chart-grid .analytics-card {
+    min-width: 0;
+
+    padding: 22px 24px;
+}
+
+
+/* =========================================================
+   CHART FOOTER
+========================================================= */
+
+.chart-footer {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding-top: 10px;
+
+    border-top: 1px solid #edf1ee;
+}
+
+.chart-footer span {
+    color: #89928b;
+
+    font-size: 10px;
+}
+
+.chart-footer strong {
+    color: #4f6957;
+
+    font-size: 10px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   CHART TOOLTIP
+========================================================= */
+
+.analytics-tooltip {
+    min-width: 130px;
+
+    padding: 11px 13px;
+
+    background: #ffffff;
+
+    border: 1px solid #dce5de;
+
+    border-radius: 9px;
+
+    box-shadow:
+        0 8px 22px rgba(20, 50, 30, 0.12);
+}
+
+.analytics-tooltip strong {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #273b2e;
+
+    font-size: 11px;
+}
+
+.analytics-tooltip span {
+    display: block;
+
+    color: #2e7d32;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   RECHARTS DEFAULT FIX
+========================================================= */
+
+.recharts-wrapper {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.recharts-cartesian-axis-tick-value {
+    fill: #647067;
+}
+
+.recharts-cartesian-grid-horizontal line {
+    stroke: #e5ebe6;
+}
+
+.recharts-cartesian-grid-vertical line {
+    stroke: transparent;
+}
+
+.recharts-bar-rectangle {
+    transition:
+        opacity 0.2s ease,
+        filter 0.2s ease;
+}
+
+.recharts-bar-rectangle:hover {
+    opacity: 0.82;
+}
+
+
+/* =========================================================
+   KEY INSIGHTS
+========================================================= */
+
+.insights-card {
+    padding: 22px 24px;
+
+    margin-bottom: 20px;
+}
+
+.insights-grid {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 12px;
+}
+
+.insight-item {
+    min-width: 0;
+
+    padding: 16px;
+
+    background: #f7faf8;
+
+    border: 1px solid #e2e9e3;
+
+    border-radius: 10px;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.insight-item:hover {
+    background: #f0f7f1;
+
+    border-color: #cddfce;
+}
+
+.insight-item span {
+    display: block;
+
+    color: #747e77;
+
+    font-size: 11px;
+}
+
+.insight-item strong {
+    display: block;
+
+    overflow: hidden;
+
+    margin-top: 6px;
+
+    color: #2e7d32;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    line-height: 1.3;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+.insight-item small {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #89928b;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.analytics-loading {
+    min-height: 430px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 13px;
+
+    background: #ffffff;
+
+    border: 1px solid #e0e7e2;
+
+    border-radius: 14px;
+}
+
+.analytics-loading p {
+    margin: 0;
+
+    color: #68746c;
+
+    font-size: 13px;
+}
+
+.analytics-spinner {
+    width: 38px;
+
+    height: 38px;
+
+    border: 4px solid #e5f0e6;
+
+    border-top-color: #2e7d32;
+
+    border-radius: 50%;
+
+    animation: analytics-spin 0.8s linear infinite;
+}
+
+@keyframes analytics-spin {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.analytics-error {
+    min-height: 350px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 30px;
+
+    background: #ffffff;
+
+    border: 1px solid #ead9d7;
+
+    border-radius: 14px;
+
+    text-align: center;
+}
+
+.analytics-error svg {
+    margin-bottom: 12px;
+
+    color: #c0392b;
+}
+
+.analytics-error h2 {
+    margin: 0;
+
+    color: #8f332d;
+
+    font-size: 20px;
+}
+
+.analytics-error p {
+    margin: 8px 0 0;
+
+    color: #777;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.analytics-empty {
+    min-height: 380px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 40px;
+
+    background: #ffffff;
+
+    border: 1px solid #e0e7e2;
+
+    border-radius: 14px;
+
+    text-align: center;
+}
+
+.analytics-empty svg {
+    margin-bottom: 15px;
+
+    color: #4f925a;
+}
+
+.analytics-empty h2 {
+    margin: 0;
+
+    color: #263d2d;
+
+    font-size: 21px;
+}
+
+.analytics-empty p {
+    max-width: 450px;
+
+    margin: 8px 0 0;
+
+    color: #778079;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.farmer-analytics-page > .footer {
+    width: 100%;
+
+    margin-top: auto;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .analytics-overview {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .insights-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .analytics-chart-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL TABLET
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .analytics-container {
+        width: 94%;
+
+        padding-top: 90px;
+    }
+
+    .analytics-header {
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+    .analytics-header-badge {
+        align-self: flex-start;
+    }
+
+    .analytics-header h1 {
+        font-size: 29px;
+    }
+
+    .analytics-main-chart,
+    .analytics-chart-grid .analytics-card,
+    .insights-card {
+        padding: 19px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 560px) {
+
+    .analytics-container {
+        width: 94%;
+
+        padding:
+            85px
+            0
+            45px;
+    }
+
+    .analytics-header {
+        margin-bottom: 20px;
+    }
+
+    .analytics-header h1 {
+        font-size: 26px;
+    }
+
+    .analytics-header p {
+        font-size: 13px;
+    }
+
+    .analytics-overview {
+        grid-template-columns: 1fr;
+
+        gap: 10px;
+    }
+
+    .analytics-kpi-card {
+        padding: 15px;
+    }
+
+    .analytics-kpi-card:hover {
+        transform: none;
+    }
+
+    .analytics-section-heading {
+        gap: 10px;
+    }
+
+    .analytics-section-heading h2 {
+        font-size: 17px;
+    }
+
+    .analytics-section-heading p {
+        font-size: 11px;
+    }
+
+    .chart-large {
+        min-height: 290px;
+    }
+
+    .analytics-main-chart {
+        margin-bottom: 15px;
+    }
+
+    .analytics-chart-grid {
+        gap: 15px;
+
+        margin-bottom: 15px;
+    }
+
+    .insights-grid {
+        grid-template-columns: 1fr 1fr;
+
+        gap: 9px;
+    }
+
+    .insight-item {
+        padding: 13px;
+    }
+
+    .insight-item strong {
+        font-size: 15px;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 390px) {
+
+    .analytics-container {
+        width: 95%;
+    }
+
+    .analytics-header h1 {
+        font-size: 24px;
+    }
+
+    .insights-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-unit {
+        display: none;
+    }
+
+    .kpi-content strong {
+        font-size: 21px;
+    }
+
+}
