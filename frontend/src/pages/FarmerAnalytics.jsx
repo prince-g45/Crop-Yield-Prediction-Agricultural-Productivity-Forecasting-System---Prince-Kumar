@@ -2,14 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 
 import {
   BarChart3,
-  CalendarDays,
-  Database,
-  Droplets,
-  Sprout,
+  TrendingUp,
   Target,
-  Thermometer,
-  TriangleAlert,
-  Wind,
+  Database,
+  CalendarDays,
+  Sprout,
 } from "lucide-react";
 
 import {
@@ -30,42 +27,41 @@ import {
   getPredictionHistory,
 } from "../services/predictionService";
 
-import "../styles/FarmerReports.css";
+import "../styles/FarmerAnalytics.css";
 
 
-function FarmerReports() {
+function FarmerAnalytics() {
 
-  // =====================================================
-  // STATE
-  // =====================================================
+  // =========================================================
+  // STATES
+  // =========================================================
 
   const [predictions, setPredictions] = useState([]);
-
-  const [selectedReport, setSelectedReport] =
-    useState(null);
 
   const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState("");
 
 
-  // =====================================================
-  // LOAD HISTORY
-  // =====================================================
+  // =========================================================
+  // LOAD PREDICTION HISTORY
+  // =========================================================
 
   useEffect(() => {
 
-    const loadReports = async () => {
+    const loadAnalytics = async () => {
 
       try {
 
         setLoading(true);
+
         setError("");
 
-        const data =
-          await getPredictionHistory();
+        const data = await getPredictionHistory();
 
-        const safeData = Array.isArray(data)
+        console.log("Analytics history:", data);
+
+        const history = Array.isArray(data)
           ? data
           : Array.isArray(data?.predictions)
           ? data.predictions
@@ -73,21 +69,17 @@ function FarmerReports() {
           ? data.history
           : [];
 
-        setPredictions(safeData);
-
-        if (safeData.length > 0) {
-          setSelectedReport(safeData[0]);
-        }
+        setPredictions(history);
 
       } catch (err) {
 
         console.error(
-          "Unable to load reports:",
+          "Failed to load analytics:",
           err
         );
 
         setError(
-          "Unable to load agricultural reports."
+          "Unable to load your prediction data."
         );
 
       } finally {
@@ -98,420 +90,434 @@ function FarmerReports() {
 
     };
 
-    loadReports();
+    loadAnalytics();
 
   }, []);
 
 
-  // =====================================================
-  // PARSE REPORT
-  // =====================================================
+  // =========================================================
+  // HELPERS
+  // =========================================================
 
-  const parseReport = (prediction) => {
+  const getYield = (item) => {
 
-    if (
-      !prediction ||
-      !prediction.agricultural_report
-    ) {
-      return null;
-    }
+    const value =
+      item?.predicted_yield ??
+      item?.predictedYield ??
+      item?.yield_prediction ??
+      item?.yield ??
+      item?.prediction ??
+      item?.predicted_production ??
+      0;
 
-    try {
+    const number = Number(value);
 
-      if (
-        typeof prediction.agricultural_report ===
-        "object"
-      ) {
-        return prediction.agricultural_report;
-      }
-
-      return JSON.parse(
-        prediction.agricultural_report
-      );
-
-    } catch (err) {
-
-      console.error(
-        "Unable to parse agricultural report:",
-        err
-      );
-
-      return null;
-
-    }
+    return Number.isFinite(number)
+      ? number
+      : 0;
 
   };
 
 
-  const report = useMemo(
-    () => parseReport(selectedReport),
-    [selectedReport]
-  );
+  const getProduction = (item) => {
+
+    const directValue =
+      item?.predicted_production ??
+      item?.predictedProduction ??
+      item?.production ??
+      item?.estimated_production ??
+      item?.estimatedProduction;
+
+    if (
+      directValue !== undefined &&
+      directValue !== null &&
+      directValue !== ""
+    ) {
+
+      const number = Number(directValue);
+
+      if (Number.isFinite(number)) {
+        return number;
+      }
+
+    }
 
 
-  // =====================================================
-  // HELPERS
-  // =====================================================
+    const area = Number(
+      item?.area ?? 0
+    );
 
-  const numberValue = (
+    const yieldValue = getYield(item);
+
+
+    if (
+      Number.isFinite(area) &&
+      area > 0 &&
+      yieldValue > 0
+    ) {
+
+      return area * yieldValue;
+
+    }
+
+
+    return 0;
+
+  };
+
+
+  const getCrop = (item) => {
+
+    return (
+      item?.crop ??
+      item?.crop_name ??
+      item?.cropName ??
+      "Unknown"
+    );
+
+  };
+
+
+  const getSeason = (item) => {
+
+    return (
+      item?.season ??
+      item?.season_name ??
+      item?.seasonName ??
+      "Unknown"
+    );
+
+  };
+
+
+  const getDate = (item) => {
+
+    return (
+      item?.created_at ??
+      item?.createdAt ??
+      item?.prediction_date ??
+      item?.predictionDate ??
+      item?.date ??
+      ""
+    );
+
+  };
+
+
+  const formatNumber = (
     value,
-    digits = 2
+    decimals = 2
   ) => {
 
     const number = Number(value);
 
     if (!Number.isFinite(number)) {
-      return "--";
+      return "0";
     }
 
-    return number.toFixed(digits);
+    return number.toFixed(decimals);
 
   };
 
 
-  const textValue = (
-    value,
-    fallback = "Not available"
-  ) => {
+  // =========================================================
+  // PERFORMANCE
+  // =========================================================
 
-    if (
-      value === null ||
-      value === undefined ||
-      value === ""
-    ) {
-      return fallback;
-    }
+  const performance = useMemo(() => {
 
-    return String(value);
+    const validYields = predictions
+      .map(getYield)
+      .filter(
+        (value) =>
+          Number.isFinite(value) &&
+          value > 0
+      );
 
-  };
 
-
-  // =====================================================
-  // YIELD / PRODUCTION DATA
-  // =====================================================
-
-  const yieldData = useMemo(() => {
-
-    if (!selectedReport) {
-      return [];
-    }
-
-    return [
-
-      {
-        metric: "Yield",
-        value:
-          Number(
-            selectedReport.predicted_yield
-          ) || 0,
-        unit: "t/ha",
-      },
-
-      {
-        metric: "Production",
-        value:
-          Number(
-            selectedReport.estimated_production
-          ) || 0,
-        unit: "tonnes",
-      },
-
-    ];
-
-  }, [selectedReport]);
-
-
-  // =====================================================
-  // SOIL DATA
-  // =====================================================
-
-  const soilData = useMemo(() => {
-
-    if (!selectedReport) {
-      return [];
-    }
-
-    return [
-
-      {
-        nutrient: "Nitrogen",
-        short: "N",
-        value:
-          Number(selectedReport.N) || 0,
-      },
-
-      {
-        nutrient: "Phosphorus",
-        short: "P",
-        value:
-          Number(selectedReport.P) || 0,
-      },
-
-      {
-        nutrient: "Potassium",
-        short: "K",
-        value:
-          Number(selectedReport.K) || 0,
-      },
-
-    ];
-
-  }, [selectedReport]);
-
-
-  // =====================================================
-  // WEATHER
-  // =====================================================
-
-  const weatherMetrics = useMemo(() => {
-
-    const weather =
-      selectedReport?.weather_analysis;
-
-    if (!weather) {
-      return [];
-    }
-
-    return [
-
-      {
-        label: "Temperature",
-        value:
-          weather.average_temperature_c !==
-            null &&
-          weather.average_temperature_c !==
-            undefined
-            ? numberValue(
-                weather.average_temperature_c
-              )
-            : "--",
-        unit: "°C",
-      },
-
-      {
-        label: "Rainfall",
-        value:
-          weather.average_rainfall_mm !==
-            null &&
-          weather.average_rainfall_mm !==
-            undefined
-            ? numberValue(
-                weather.average_rainfall_mm
-              )
-            : "--",
-        unit: "mm",
-      },
-
-      {
-        label: "Humidity",
-        value:
-          weather.average_humidity_percent !==
-            null &&
-          weather.average_humidity_percent !==
-            undefined
-            ? numberValue(
-                weather.average_humidity_percent
-              )
-            : "--",
-        unit: "%",
-      },
-
-    ];
-
-  }, [selectedReport]);
-
-
-  // =====================================================
-  // RISK CLASSIFICATION
-  // =====================================================
+    const validProductions = predictions
+      .map(getProduction)
+      .filter(
+        (value) =>
+          Number.isFinite(value) &&
+          value > 0
+      );
 
-  const getRiskLevel = (text) => {
-
-    if (!text) {
-      return "Review";
-    }
 
-    const value =
-      String(text).toLowerCase();
-
+    const averageYield =
+      validYields.length > 0
+        ? validYields.reduce(
+            (sum, value) =>
+              sum + value,
+            0
+          ) / validYields.length
+        : 0;
 
-    if (
-      value.includes("high risk") ||
-      value.includes("high")
-    ) {
-      return "High";
-    }
 
+    const bestYield =
+      validYields.length > 0
+        ? Math.max(...validYields)
+        : 0;
 
-    if (
-      value.includes("moderate risk") ||
-      value.includes("medium risk") ||
-      value.includes("moderate") ||
-      value.includes("medium")
-    ) {
-      return "Medium";
-    }
 
+    const averageProduction =
+      validProductions.length > 0
+        ? validProductions.reduce(
+            (sum, value) =>
+              sum + value,
+            0
+          ) / validProductions.length
+        : 0;
 
-    if (
-      value.includes("low risk") ||
-      value.includes("low")
-    ) {
-      return "Low";
-    }
 
+    return {
 
-    return "Review";
+      totalPredictions:
+        predictions.length,
 
-  };
+      averageYield,
 
+      bestYield,
 
-  const pestRisk =
-    getRiskLevel(
-      report?.pest_risk
-    );
-
-  const weatherRisk =
-    getRiskLevel(
-      report?.weather_risk
-    );
-
-  const soilRisk =
-    getRiskLevel(
-      report?.soil_risk
-    );
-
-
-  // =====================================================
-  // OVERALL RISK
-  // =====================================================
-
-  const overallRisk = useMemo(() => {
-
-    const risks = [
-      pestRisk,
-      weatherRisk,
-      soilRisk,
-    ];
-
-
-    if (risks.includes("High")) {
-      return "High";
-    }
-
-
-    if (risks.includes("Medium")) {
-      return "Medium";
-    }
-
-
-    if (
-      risks.length > 0 &&
-      risks.every(
-        (risk) => risk === "Low"
-      )
-    ) {
-      return "Low";
-    }
-
-
-    return "Review";
-
-  }, [
-    pestRisk,
-    weatherRisk,
-    soilRisk,
-  ]);
-
-
-  // =====================================================
-  // RECOMMENDATIONS
-  // =====================================================
-
-  const recommendations = useMemo(() => {
-
-    if (!report) {
-      return [];
-    }
-
-    const result = [];
-
-
-    const addRecommendation = (
-      title,
-      value
-    ) => {
-
-      if (
-        value !== null &&
-        value !== undefined &&
-        String(value).trim() !== ""
-      ) {
-
-        result.push({
-          title,
-          value: String(value),
-        });
-
-      }
+      averageProduction,
 
     };
 
-
-    addRecommendation(
-      "Crop Recommendation",
-      report.recommended_crop ||
-      report.crop_recommendation ||
-      report.best_crop
-    );
+  }, [predictions]);
 
 
-    addRecommendation(
-      "Fertilizer Advice",
-      report.fertilizer_recommendation ||
-      report.fertilizer_advice
-    );
+  // =========================================================
+  // YIELD PERFORMANCE DATA
+  // =========================================================
+
+  const yieldData = useMemo(() => {
+
+    return predictions
+      .map((item, index) => {
+
+        const yieldValue =
+          getYield(item);
 
 
-    addRecommendation(
-      "Irrigation Advice",
-      report.irrigation_recommendation ||
-      report.irrigation_advice
-    );
+        return {
+
+          name:
+            `Prediction ${index + 1}`,
+
+          yield:
+            Number(
+              yieldValue.toFixed(2)
+            ),
+
+          crop:
+            getCrop(item),
+
+          season:
+            getSeason(item),
+
+        };
+
+      })
+      .filter(
+        (item) =>
+          item.yield > 0
+      );
+
+  }, [predictions]);
 
 
-    addRecommendation(
-      "Pest Management",
-      report.pest_recommendation ||
-      report.pest_management
-    );
+  // =========================================================
+  // CROP PERFORMANCE
+  // =========================================================
+
+  const cropData = useMemo(() => {
+
+    const cropMap = {};
 
 
-    addRecommendation(
-      "Weather Guidance",
-      report.weather_recommendation ||
-      report.weather_advice
-    );
+    predictions.forEach((item) => {
+
+      const crop =
+        getCrop(item);
+
+      const yieldValue =
+        getYield(item);
 
 
-    addRecommendation(
-      "Optimization Advice",
-      report.optimization_advice ||
-      report.productivity_advice
-    );
+      if (!yieldValue) {
+        return;
+      }
 
 
-    return result;
+      if (!cropMap[crop]) {
 
-  }, [report]);
+        cropMap[crop] = {
+
+          crop,
+
+          total: 0,
+
+          count: 0,
+
+        };
+
+      }
 
 
-  // =====================================================
+      cropMap[crop].total +=
+        yieldValue;
+
+      cropMap[crop].count += 1;
+
+    });
+
+
+    return Object.values(cropMap)
+
+      .map((item) => ({
+
+        crop:
+          item.crop,
+
+        yield:
+          Number(
+            (
+              item.total /
+              item.count
+            ).toFixed(2)
+          ),
+
+      }))
+
+      .sort(
+        (a, b) =>
+          b.yield - a.yield
+      );
+
+  }, [predictions]);
+
+
+  // =========================================================
+  // SEASON PERFORMANCE
+  // =========================================================
+
+  const seasonData = useMemo(() => {
+
+    const seasonMap = {};
+
+
+    predictions.forEach((item) => {
+
+      const season =
+        getSeason(item);
+
+      const yieldValue =
+        getYield(item);
+
+
+      if (!yieldValue) {
+        return;
+      }
+
+
+      if (!seasonMap[season]) {
+
+        seasonMap[season] = {
+
+          season,
+
+          total: 0,
+
+          count: 0,
+
+        };
+
+      }
+
+
+      seasonMap[season].total +=
+        yieldValue;
+
+      seasonMap[season].count += 1;
+
+    });
+
+
+    return Object.values(seasonMap)
+
+      .map((item) => ({
+
+        season:
+          item.season,
+
+        yield:
+          Number(
+            (
+              item.total /
+              item.count
+            ).toFixed(2)
+          ),
+
+      }))
+
+      .sort(
+        (a, b) =>
+          b.yield - a.yield
+      );
+
+  }, [predictions]);
+
+
+  // =========================================================
+  // INSIGHTS
+  // =========================================================
+
+  const insights = useMemo(() => {
+
+    const latest =
+      predictions.length > 0
+        ? predictions[
+            predictions.length - 1
+          ]
+        : null;
+
+
+    return {
+
+      bestCrop:
+        cropData.length > 0
+          ? cropData[0]
+          : null,
+
+      bestSeason:
+        seasonData.length > 0
+          ? seasonData[0]
+          : null,
+
+      latestYield:
+        latest
+          ? getYield(latest)
+          : 0,
+
+      latestCrop:
+        latest
+          ? getCrop(latest)
+          : "—",
+
+    };
+
+  }, [
+    predictions,
+    cropData,
+    seasonData,
+  ]);
+
+
+  // =========================================================
   // TOOLTIP
-  // =====================================================
+  // =========================================================
 
-  const ChartTooltip = ({
+  const CustomTooltip = ({
     active,
     payload,
     label,
@@ -522,40 +528,29 @@ function FarmerReports() {
       !payload ||
       !payload.length
     ) {
+
       return null;
+
     }
+
+
+    const value =
+      payload[0]?.value;
 
 
     return (
 
-      <div className="report-chart-tooltip">
+      <div className="analytics-tooltip">
 
         <strong>
           {label}
         </strong>
 
-        {payload.map(
-          (item, index) => (
-
-            <div
-              key={index}
-              className="tooltip-row"
-            >
-
-              <span>
-                {item.name}
-              </span>
-
-              <strong>
-                {numberValue(
-                  item.value
-                )}
-              </strong>
-
-            </div>
-
-          )
-        )}
+        <span>
+          Yield:{" "}
+          {formatNumber(value)}
+          {" "}t/ha
+        </span>
 
       </div>
 
@@ -564,26 +559,26 @@ function FarmerReports() {
   };
 
 
-  // =====================================================
+  // =========================================================
   // LOADING
-  // =====================================================
+  // =========================================================
 
   if (loading) {
 
     return (
 
-      <div className="reports-page">
+      <div className="farmer-analytics-page">
 
         <Navbar />
 
-        <main className="reports-container">
+        <main className="analytics-container">
 
-          <div className="reports-loading">
+          <div className="analytics-loading">
 
-            <div className="loading-spinner"></div>
+            <div className="analytics-spinner"></div>
 
             <p>
-              Loading agricultural reports...
+              Loading analytics...
             </p>
 
           </div>
@@ -599,26 +594,26 @@ function FarmerReports() {
   }
 
 
-  // =====================================================
+  // =========================================================
   // ERROR
-  // =====================================================
+  // =========================================================
 
   if (error) {
 
     return (
 
-      <div className="reports-page">
+      <div className="farmer-analytics-page">
 
         <Navbar />
 
-        <main className="reports-container">
+        <main className="analytics-container">
 
-          <div className="empty-report">
+          <div className="analytics-error">
 
             <BarChart3 size={42} />
 
             <h2>
-              Reports unavailable
+              Analytics unavailable
             </h2>
 
             <p>
@@ -638,35 +633,35 @@ function FarmerReports() {
   }
 
 
-  // =====================================================
+  // =========================================================
   // EMPTY
-  // =====================================================
+  // =========================================================
 
   if (!predictions.length) {
 
     return (
 
-      <div className="reports-page">
+      <div className="farmer-analytics-page">
 
         <Navbar />
 
-        <main className="reports-container">
+        <main className="analytics-container">
 
-          <section className="reports-header">
+          <section className="analytics-header">
 
             <div>
 
-              <span className="reports-eyebrow">
-                FARM REPORTS
+              <span className="analytics-label">
+                FARM ANALYTICS
               </span>
 
               <h1>
-                Agricultural Reports
+                Crop Performance
               </h1>
 
               <p>
-                View crop performance, soil,
-                weather, risk and recommendations.
+                Your prediction performance
+                will appear here.
               </p>
 
             </div>
@@ -674,17 +669,17 @@ function FarmerReports() {
           </section>
 
 
-          <div className="empty-report">
+          <div className="analytics-empty">
 
             <Database size={42} />
 
             <h2>
-              No Reports Yet
+              No prediction data yet
             </h2>
 
             <p>
               Make a crop yield prediction
-              to generate your first report.
+              to start building analytics.
             </p>
 
           </div>
@@ -700,48 +695,51 @@ function FarmerReports() {
   }
 
 
-  // =====================================================
-  // MAIN
-  // =====================================================
+  // =========================================================
+  // MAIN PAGE
+  // =========================================================
 
   return (
 
-    <div className="reports-page">
+    <div className="farmer-analytics-page">
 
       <Navbar />
 
 
-      <main className="reports-container">
+      <main className="analytics-container">
 
 
-        {/* HEADER */}
+        {/* =================================================
+            HEADER
+        ================================================= */}
 
-        <section className="reports-header">
+        <section className="analytics-header">
 
           <div>
 
-            <span className="reports-eyebrow">
-              FARM REPORTS
+            <span className="analytics-label">
+              FARM ANALYTICS
             </span>
 
             <h1>
-              Agricultural Reports
+              Crop Performance
             </h1>
 
             <p>
-              A clear summary of crop yield,
-              production, soil, weather and risk.
+              Clear view of your yield,
+              crop and seasonal performance.
             </p>
 
           </div>
 
 
-          <div className="reports-count">
+          <div className="analytics-header-badge">
 
-            <Database size={17} />
+            <BarChart3 size={18} />
 
             <span>
-              {predictions.length} reports
+              {performance.totalPredictions}
+              {" "}predictions
             </span>
 
           </div>
@@ -749,562 +747,318 @@ function FarmerReports() {
         </section>
 
 
-        {/* SELECTOR */}
+        {/* =================================================
+            KPI CARDS
+        ================================================= */}
 
-        <section className="report-selector">
+        <section className="analytics-overview">
 
-          <div className="selector-header">
 
-            <span className="section-label">
-              REPORT HISTORY
-            </span>
+          <div className="analytics-kpi-card">
 
-            <h2>
-              Select Prediction
-            </h2>
+            <div className="kpi-icon">
+              <Database size={20} />
+            </div>
 
-            <p>
-              Select a prediction to view
-              its detailed report.
-            </p>
+            <div className="kpi-content">
+
+              <span>
+                Total Predictions
+              </span>
+
+              <strong>
+                {performance.totalPredictions}
+              </strong>
+
+              <small>
+                Recorded predictions
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <div className="analytics-kpi-card">
+
+            <div className="kpi-icon">
+              <TrendingUp size={20} />
+            </div>
+
+            <div className="kpi-content">
+
+              <span>
+                Average Yield
+              </span>
+
+              <strong>
+                {formatNumber(
+                  performance.averageYield
+                )}
+              </strong>
+
+              <small>
+                tonnes per hectare
+              </small>
+
+            </div>
 
           </div>
 
 
-          <div className="prediction-list">
+          <div className="analytics-kpi-card">
 
-            {predictions.map(
-              (prediction, index) => (
+            <div className="kpi-icon">
+              <Target size={20} />
+            </div>
 
-                <button
-                  key={
-                    prediction.id ??
-                    prediction.prediction_id ??
-                    index
-                  }
-                  type="button"
-                  className={
-                    `prediction-item ${
-                      selectedReport ===
-                      prediction
-                        ? "selected"
-                        : ""
-                    }`
-                  }
-                  onClick={() =>
-                    setSelectedReport(
-                      prediction
-                    )
-                  }
-                >
+            <div className="kpi-content">
 
-                  <div className="prediction-item-main">
+              <span>
+                Best Yield
+              </span>
 
-                    <strong>
-                      {textValue(
-                        prediction.crop,
-                        "Crop"
-                      )}
-                    </strong>
+              <strong>
+                {formatNumber(
+                  performance.bestYield
+                )}
+              </strong>
 
-                    <span>
-                      {textValue(
-                        prediction.farm_name,
-                        "Farm"
-                      )}
-                    </span>
+              <small>
+                highest prediction
+              </small>
 
-                  </div>
-
-
-                  <div className="prediction-item-details">
-
-                    <span>
-                      {textValue(
-                        prediction.season,
-                        "Season"
-                      )}
-                    </span>
-
-                    <strong>
-                      {numberValue(
-                        prediction.predicted_yield
-                      )}{" "}
-                      t/ha
-                    </strong>
-
-                  </div>
-
-                </button>
-
-              )
-            )}
+            </div>
 
           </div>
+
+
+          <div className="analytics-kpi-card">
+
+            <div className="kpi-icon">
+              <Sprout size={20} />
+            </div>
+
+            <div className="kpi-content">
+
+              <span>
+                Average Production
+              </span>
+
+              <strong>
+                {formatNumber(
+                  performance.averageProduction
+                )}
+              </strong>
+
+              <small>
+                estimated tonnes
+              </small>
+
+            </div>
+
+          </div>
+
 
         </section>
 
 
-        {/* REPORT */}
+        {/* =================================================
+            YIELD PERFORMANCE
+        ================================================= */}
 
-        {report ? (
+        {yieldData.length > 0 && (
 
-          <section className="report-content">
+          <section className="analytics-card analytics-main-chart">
 
+            <div className="analytics-section-heading">
 
-            {/* REPORT HEADER */}
+              <div>
 
-            <section className="report-title">
-
-              <div className="report-title-info">
-
-                <span className="section-label">
-                  AGRICULTURAL REPORT
+                <span className="section-kicker">
+                  YIELD
                 </span>
 
                 <h2>
-                  {textValue(
-                    selectedReport.crop,
-                    "Crop"
-                  )}{" "}
-                  Performance
+                  Yield Performance
                 </h2>
 
                 <p>
-                  {textValue(
-                    selectedReport.season,
-                    "Season"
-                  )}
-                  {" · "}
-                  {textValue(
-                    selectedReport.state,
-                    "Location"
-                  )}
+                  Predicted yield for each
+                  recorded prediction.
                 </p>
 
               </div>
 
 
-              <div className="report-date">
-
-                <span>
-                  Farm
-                </span>
-
-                <strong>
-                  {textValue(
-                    selectedReport.farm_name
-                  )}
-                </strong>
-
+              <div className="chart-unit">
+                t/ha
               </div>
 
-            </section>
+            </div>
 
 
-            {/* KPI */}
+            <div className="chart-container chart-large">
 
-            <section className="report-overview">
-
-
-              <div className="overview-card">
-
-                <div className="overview-icon">
-                  <TrendingUpIcon />
-                </div>
-
-                <div>
-
-                  <span>
-                    Predicted Yield
-                  </span>
-
-                  <strong>
-                    {numberValue(
-                      selectedReport.predicted_yield
-                    )}
-                  </strong>
-
-                  <small>
-                    tonnes / hectare
-                  </small>
-
-                </div>
-
-              </div>
-
-
-              <div className="overview-card">
-
-                <div className="overview-icon">
-                  <Target size={19} />
-                </div>
-
-                <div>
-
-                  <span>
-                    Production
-                  </span>
-
-                  <strong>
-                    {numberValue(
-                      selectedReport.estimated_production
-                    )}
-                  </strong>
-
-                  <small>
-                    estimated tonnes
-                  </small>
-
-                </div>
-
-              </div>
-
-
-              <div className="overview-card">
-
-                <div className="overview-icon">
-                  <Sprout size={19} />
-                </div>
-
-                <div>
-
-                  <span>
-                    Farm Area
-                  </span>
-
-                  <strong>
-                    {numberValue(
-                      selectedReport.area
-                    )}
-                  </strong>
-
-                  <small>
-                    hectares
-                  </small>
-
-                </div>
-
-              </div>
-
-
-              <div
-                className={
-                  `overview-card risk-overview ${
-                    overallRisk.toLowerCase()
-                  }`
-                }
+              <ResponsiveContainer
+                width="100%"
+                height={340}
               >
 
-                <div className="overview-icon">
-                  <TriangleAlert size={19} />
-                </div>
-
-                <div>
-
-                  <span>
-                    Overall Risk
-                  </span>
-
-                  <strong>
-                    {overallRisk}
-                  </strong>
-
-                  <small>
-                    current assessment
-                  </small>
-
-                </div>
-
-              </div>
-
-
-            </section>
-
-
-            {/* YIELD CHART */}
-
-            <section className="report-card">
-
-              <div className="report-card-heading">
-
-                <div>
-
-                  <span className="section-label">
-                    PRODUCTIVITY
-                  </span>
-
-                  <h3>
-                    Yield & Production
-                  </h3>
-
-                  <p>
-                    Expected output for this farm.
-                  </p>
-
-                </div>
-
-                <span className="chart-unit">
-                  Current prediction
-                </span>
-
-              </div>
-
-
-              <div className="chart-explanation">
-
-                <div>
-
-                  <span>
-                    Yield
-                  </span>
-
-                  <strong>
-                    {numberValue(
-                      selectedReport.predicted_yield
-                    )}{" "}
-                    t/ha
-                  </strong>
-
-                  <small>
-                    Expected output per hectare
-                  </small>
-
-                </div>
-
-
-                <div>
-
-                  <span>
-                    Production
-                  </span>
-
-                  <strong>
-                    {numberValue(
-                      selectedReport.estimated_production
-                    )}{" "}
-                    tonnes
-                  </strong>
-
-                  <small>
-                    Expected total farm output
-                  </small>
-
-                </div>
-
-              </div>
-
-
-              <div className="chart-container yield-chart">
-
-                <ResponsiveContainer
-                  width="100%"
-                  height="100%"
+                <BarChart
+                  data={yieldData}
+                  margin={{
+                    top: 25,
+                    right: 20,
+                    left: 5,
+                    bottom: 20,
+                  }}
+                  barCategoryGap="20%"
                 >
 
-                  <BarChart
-                    data={yieldData}
-                    margin={{
-                      top: 20,
-                      right: 25,
-                      left: 10,
-                      bottom: 15,
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    vertical={false}
+                    stroke="#e5ebe6"
+                  />
+
+
+                  <XAxis
+                    dataKey="name"
+                    tick={{
+                      fill: "#647067",
+                      fontSize: 11,
                     }}
+                    axisLine={{
+                      stroke: "#dce4de",
+                    }}
+                    tickLine={false}
+                  />
+
+
+                  <YAxis
+                    tick={{
+                      fill: "#647067",
+                      fontSize: 11,
+                    }}
+                    axisLine={false}
+                    tickLine={false}
+                    width={55}
+                    label={{
+                      value: "Yield (t/ha)",
+                      angle: -90,
+                      position: "insideLeft",
+                      style: {
+                        fill: "#647067",
+                        fontSize: 11,
+                      },
+                    }}
+                  />
+
+
+                  <Tooltip
+                    content={
+                      <CustomTooltip />
+                    }
+                    cursor={{
+                      fill: "#f2f7f3",
+                    }}
+                  />
+
+
+                  <Bar
+                    dataKey="yield"
+                    name="Yield"
+                    fill="#3f8f4c"
+                    radius={[
+                      7,
+                      7,
+                      0,
+                      0,
+                    ]}
+                    maxBarSize={55}
                   >
 
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      vertical={false}
-                      stroke="#e5ebe6"
-                    />
+                    {yieldData.map(
+                      (item, index) => (
 
-                    <XAxis
-                      dataKey="metric"
-                      tick={{
-                        fontSize: 12,
-                        fill: "#536158",
-                      }}
-                      axisLine={{
-                        stroke: "#dce4de",
-                      }}
-                      tickLine={false}
-                    />
+                        <Cell
+                          key={
+                            `yield-${index}`
+                          }
+                          fill={
+                            index ===
+                            yieldData.length - 1
+                              ? "#2e7d32"
+                              : "#74a979"
+                          }
+                        />
 
-                    <YAxis
-                      tick={{
-                        fontSize: 11,
-                        fill: "#68736c",
-                      }}
-                      axisLine={false}
-                      tickLine={false}
-                    />
+                      )
+                    )}
 
-                    <Tooltip
-                      content={
-                        <ChartTooltip />
-                      }
-                    />
+                  </Bar>
 
-                    <Bar
-                      dataKey="value"
-                      name="Value"
-                      radius={[
-                        7,
-                        7,
-                        0,
-                        0,
-                      ]}
-                      barSize={70}
-                    >
+                </BarChart>
 
-                      <Cell
-                        fill="#2e7d32"
-                      />
+              </ResponsiveContainer>
 
-                      <Cell
-                        fill="#65a56d"
-                      />
+            </div>
 
-                    </Bar>
+          </section>
 
-                  </BarChart>
-
-                </ResponsiveContainer>
-
-              </div>
-
-            </section>
+        )}
 
 
-            {/* WEATHER */}
+        {/* =================================================
+            CROP + SEASON
+        ================================================= */}
 
-            <section className="report-card">
+        <section className="analytics-chart-grid">
 
-              <div className="report-card-heading">
+
+          {/* CROP PERFORMANCE */}
+
+          {cropData.length > 0 && (
+
+            <div className="analytics-card">
+
+              <div className="analytics-section-heading">
 
                 <div>
 
-                  <span className="section-label">
-                    ENVIRONMENT
+                  <span className="section-kicker">
+                    CROP
                   </span>
 
-                  <h3>
-                    Weather Conditions
-                  </h3>
+                  <h2>
+                    Crop Performance
+                  </h2>
 
                   <p>
-                    Average conditions associated
-                    with this prediction.
+                    Average predicted yield by crop.
                   </p>
 
                 </div>
 
-              </div>
-
-
-              <div className="weather-metrics">
-
-
-                <div className="weather-metric">
-
-                  <div className="weather-icon">
-                    <Thermometer size={18} />
-                  </div>
-
-                  <span>
-                    Temperature
-                  </span>
-
-                  <strong>
-                    {weatherMetrics[0]?.value ??
-                      "--"}{" "}
-                    °C
-                  </strong>
-
-                </div>
-
-
-                <div className="weather-metric">
-
-                  <div className="weather-icon">
-                    <Droplets size={18} />
-                  </div>
-
-                  <span>
-                    Rainfall
-                  </span>
-
-                  <strong>
-                    {weatherMetrics[1]?.value ??
-                      "--"}{" "}
-                    mm
-                  </strong>
-
-                </div>
-
-
-                <div className="weather-metric">
-
-                  <div className="weather-icon">
-                    <Wind size={18} />
-                  </div>
-
-                  <span>
-                    Humidity
-                  </span>
-
-                  <strong>
-                    {weatherMetrics[2]?.value ??
-                      "--"}{" "}
-                    %
-                  </strong>
-
-                </div>
-
-
-              </div>
-
-            </section>
-
-
-            {/* SOIL */}
-
-            <section className="report-card">
-
-              <div className="report-card-heading">
-
-                <div>
-
-                  <span className="section-label">
-                    SOIL
-                  </span>
-
-                  <h3>
-                    Soil Nutrient Analysis
-                  </h3>
-
-                  <p>
-                    Available nitrogen,
-                    phosphorus and potassium.
-                  </p>
-
-                </div>
+                <Sprout size={20} />
 
               </div>
 
 
-              <div className="chart-container soil-chart">
+              <div className="chart-container">
 
                 <ResponsiveContainer
                   width="100%"
-                  height="100%"
+                  height={300}
                 >
 
                   <BarChart
-                    data={soilData}
+                    data={cropData}
+                    layout="vertical"
                     margin={{
-                      top: 15,
-                      right: 20,
+                      top: 10,
+                      right: 35,
                       left: 10,
                       bottom: 10,
                     }}
@@ -1312,16 +1066,16 @@ function FarmerReports() {
 
                     <CartesianGrid
                       strokeDasharray="3 3"
-                      vertical={false}
+                      horizontal={false}
                       stroke="#e5ebe6"
                     />
 
+
                     <XAxis
-                      dataKey="short"
+                      type="number"
                       tick={{
-                        fontSize: 13,
-                        fontWeight: 700,
-                        fill: "#435147",
+                        fill: "#647067",
+                        fontSize: 11,
                       }}
                       axisLine={{
                         stroke: "#dce4de",
@@ -1329,32 +1083,42 @@ function FarmerReports() {
                       tickLine={false}
                     />
 
+
                     <YAxis
+                      type="category"
+                      dataKey="crop"
+                      width={85}
                       tick={{
-                        fontSize: 11,
-                        fill: "#68736c",
+                        fill: "#36443b",
+                        fontSize: 12,
+                        fontWeight: 600,
                       }}
                       axisLine={false}
                       tickLine={false}
                     />
 
+
                     <Tooltip
                       content={
-                        <ChartTooltip />
+                        <CustomTooltip />
                       }
+                      cursor={{
+                        fill: "#f2f7f3",
+                      }}
                     />
 
+
                     <Bar
-                      dataKey="value"
-                      name="Value"
-                      fill="#4f9159"
+                      dataKey="yield"
+                      name="Yield"
+                      fill="#3f8f4c"
                       radius={[
-                        7,
-                        7,
                         0,
+                        7,
+                        7,
                         0,
                       ]}
-                      barSize={60}
+                      maxBarSize={32}
                     />
 
                   </BarChart>
@@ -1364,362 +1128,273 @@ function FarmerReports() {
               </div>
 
 
-              <div className="soil-values">
+              <div className="chart-footer">
 
-                {soilData.map(
-                  (soil) => (
+                <span>
+                  Unit
+                </span>
 
-                    <div
-                      className="soil-value"
-                      key={soil.short}
-                    >
-
-                      <span>
-                        {soil.nutrient}
-                      </span>
-
-                      <strong>
-                        {numberValue(
-                          soil.value
-                        )}
-                      </strong>
-
-                    </div>
-
-                  )
-                )}
+                <strong>
+                  tonnes per hectare
+                </strong>
 
               </div>
 
+            </div>
 
-              <div className="soil-details">
+          )}
 
-                <div>
 
-                  <span>
-                    Soil pH
-                  </span>
+          {/* SEASON PERFORMANCE */}
 
-                  <strong>
-                    {numberValue(
-                      selectedReport.pH
-                    )}
-                  </strong>
+          {seasonData.length > 0 && (
 
-                </div>
+            <div className="analytics-card">
 
+              <div className="analytics-section-heading">
 
                 <div>
 
-                  <span>
-                    Soil Health
+                  <span className="section-kicker">
+                    SEASON
                   </span>
 
-                  <strong>
-                    {textValue(
-                      selectedReport.soil_health,
-                      "Unknown"
-                    )}
-                  </strong>
-
-                </div>
-
-              </div>
-
-            </section>
-
-
-            {/* RISK */}
-
-            <section className="report-card risk-section">
-
-              <div className="report-card-heading">
-
-                <div>
-
-                  <span className="section-label">
-                    RISK ASSESSMENT
-                  </span>
-
-                  <h3>
-                    Farm Risk Status
-                  </h3>
+                  <h2>
+                    Yield by Season
+                  </h2>
 
                   <p>
-                    Current risk levels from the
-                    agricultural report.
+                    Average predicted yield
+                    for each season.
                   </p>
 
                 </div>
 
+                <CalendarDays size={20} />
 
-                <div
-                  className={
-                    `overall-risk ${
-                      overallRisk.toLowerCase()
-                    }`
-                  }
+              </div>
+
+
+              <div className="chart-container">
+
+                <ResponsiveContainer
+                  width="100%"
+                  height={300}
                 >
 
-                  <span>
-                    Overall Risk
-                  </span>
+                  <BarChart
+                    data={seasonData}
+                    margin={{
+                      top: 15,
+                      right: 15,
+                      left: 5,
+                      bottom: 10,
+                    }}
+                    barCategoryGap="25%"
+                  >
 
-                  <strong>
-                    {overallRisk}
-                  </strong>
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      vertical={false}
+                      stroke="#e5ebe6"
+                    />
 
-                </div>
+
+                    <XAxis
+                      dataKey="season"
+                      tick={{
+                        fill: "#36443b",
+                        fontSize: 12,
+                        fontWeight: 600,
+                      }}
+                      axisLine={{
+                        stroke: "#dce4de",
+                      }}
+                      tickLine={false}
+                    />
+
+
+                    <YAxis
+                      tick={{
+                        fill: "#647067",
+                        fontSize: 11,
+                      }}
+                      axisLine={false}
+                      tickLine={false}
+                      width={45}
+                    />
+
+
+                    <Tooltip
+                      content={
+                        <CustomTooltip />
+                      }
+                      cursor={{
+                        fill: "#f2f7f3",
+                      }}
+                    />
+
+
+                    <Bar
+                      dataKey="yield"
+                      name="Yield"
+                      fill="#4f9660"
+                      radius={[
+                        7,
+                        7,
+                        0,
+                        0,
+                      ]}
+                      maxBarSize={55}
+                    />
+
+                  </BarChart>
+
+                </ResponsiveContainer>
 
               </div>
 
 
-              <div className="risk-grid">
+              <div className="chart-footer">
 
+                <span>
+                  Unit
+                </span>
 
-                <RiskCard
-                  title="Pest Risk"
-                  level={pestRisk}
-                />
-
-
-                <RiskCard
-                  title="Weather Risk"
-                  level={weatherRisk}
-                />
-
-
-                <RiskCard
-                  title="Soil Risk"
-                  level={soilRisk}
-                />
-
+                <strong>
+                  tonnes per hectare
+                </strong>
 
               </div>
 
+            </div>
 
-              <div className="risk-legend">
+          )}
 
-                <span>
-                  <i className="risk-dot low-dot"></i>
-                  Low
-                </span>
-
-                <span>
-                  <i className="risk-dot medium-dot"></i>
-                  Medium
-                </span>
-
-                <span>
-                  <i className="risk-dot high-dot"></i>
-                  High
-                </span>
-
-              </div>
-
-            </section>
+        </section>
 
 
-            {/* RECOMMENDATIONS */}
+        {/* =================================================
+            KEY INSIGHTS
+        ================================================= */}
 
-            {recommendations.length > 0 && (
+        <section className="analytics-card insights-card">
 
-              <section className="report-card">
+          <div className="analytics-section-heading">
 
-                <div className="report-card-heading">
+            <div>
 
-                  <div>
-
-                    <span className="section-label">
-                      DECISION SUPPORT
-                    </span>
-
-                    <h3>
-                      Farming Recommendations
-                    </h3>
-
-                    <p>
-                      Practical suggestions available
-                      from the agricultural report.
-                    </p>
-
-                  </div>
-
-                </div>
-
-
-                <div className="recommendation-grid">
-
-                  {recommendations.map(
-                    (recommendation) => (
-
-                      <article
-                        className="recommendation-card"
-                        key={
-                          recommendation.title
-                        }
-                      >
-
-                        <div className="recommendation-number">
-                          {String(
-                            recommendations.indexOf(
-                              recommendation
-                            ) + 1
-                          ).padStart(2, "0")}
-                        </div>
-
-                        <div>
-
-                          <h4>
-                            {
-                              recommendation.title
-                            }
-                          </h4>
-
-                          <p>
-                            {
-                              recommendation.value
-                            }
-                          </p>
-
-                        </div>
-
-                      </article>
-
-                    )
-                  )}
-
-                </div>
-
-              </section>
-
-            )}
-
-
-            {/* FINAL SUMMARY */}
-
-            <section className="report-summary">
-
-              <span className="section-label">
-                REPORT SUMMARY
+              <span className="section-kicker">
+                SUMMARY
               </span>
 
-              <h3>
-                Agricultural Assessment
-              </h3>
+              <h2>
+                Key Insights
+              </h2>
 
+              <p>
+                Important results from your
+                prediction history.
+              </p>
 
-              <div className="summary-grid-report">
-
-
-                <div>
-
-                  <span>
-                    Crop
-                  </span>
-
-                  <strong>
-                    {textValue(
-                      selectedReport.crop
-                    )}
-                  </strong>
-
-                </div>
-
-
-                <div>
-
-                  <span>
-                    Expected Yield
-                  </span>
-
-                  <strong>
-                    {numberValue(
-                      selectedReport.predicted_yield
-                    )}{" "}
-                    t/ha
-                  </strong>
-
-                </div>
-
-
-                <div>
-
-                  <span>
-                    Soil Status
-                  </span>
-
-                  <strong>
-                    {textValue(
-                      selectedReport.soil_health,
-                      "Unknown"
-                    )}
-                  </strong>
-
-                </div>
-
-
-                <div
-                  className={
-                    `summary-risk ${
-                      overallRisk.toLowerCase()
-                    }`
-                  }
-                >
-
-                  <span>
-                    Overall Risk
-                  </span>
-
-                  <strong>
-                    {overallRisk}
-                  </strong>
-
-                </div>
-
-
-              </div>
-
-
-              {(
-                report.summary ||
-                report.overall_summary ||
-                report.final_summary
-              ) && (
-
-                <p className="report-final-text">
-
-                  {report.summary ||
-                    report.overall_summary ||
-                    report.final_summary}
-
-                </p>
-
-              )}
-
-            </section>
-
-
-          </section>
-
-        ) : (
-
-          <div className="empty-report">
-
-            <BarChart3 size={42} />
-
-            <h2>
-              Report Data Unavailable
-            </h2>
-
-            <p>
-              The selected prediction does not
-              contain a readable agricultural report.
-            </p>
+            </div>
 
           </div>
 
-        )}
+
+          <div className="insights-grid">
+
+
+            <div className="insight-item">
+
+              <span>
+                Best Crop
+              </span>
+
+              <strong>
+                {insights.bestCrop
+                  ? insights.bestCrop.crop
+                  : "—"}
+              </strong>
+
+              <small>
+                {insights.bestCrop
+                  ? `${formatNumber(
+                      insights.bestCrop.yield
+                    )} t/ha`
+                  : "No data"}
+              </small>
+
+            </div>
+
+
+            <div className="insight-item">
+
+              <span>
+                Best Season
+              </span>
+
+              <strong>
+                {insights.bestSeason
+                  ? insights.bestSeason.season
+                  : "—"}
+              </strong>
+
+              <small>
+                {insights.bestSeason
+                  ? `${formatNumber(
+                      insights.bestSeason.yield
+                    )} t/ha`
+                  : "No data"}
+              </small>
+
+            </div>
+
+
+            <div className="insight-item">
+
+              <span>
+                Latest Yield
+              </span>
+
+              <strong>
+                {formatNumber(
+                  insights.latestYield
+                )}{" "}
+                t/ha
+              </strong>
+
+              <small>
+                {insights.latestCrop}
+              </small>
+
+            </div>
+
+
+            <div className="insight-item">
+
+              <span>
+                Highest Recorded Yield
+              </span>
+
+              <strong>
+                {formatNumber(
+                  performance.bestYield
+                )}{" "}
+                t/ha
+              </strong>
+
+              <small>
+                From prediction history
+              </small>
+
+            </div>
+
+
+          </div>
+
+        </section>
+
 
       </main>
 
@@ -1733,75 +1408,4 @@ function FarmerReports() {
 }
 
 
-/* =========================================================
-   SMALL ICON COMPONENT
-========================================================= */
-
-function TrendingUpIcon() {
-
-  return (
-    <BarChart3 size={19} />
-  );
-
-}
-
-
-/* =========================================================
-   RISK CARD
-========================================================= */
-
-function RiskCard({
-  title,
-  level,
-}) {
-
-  return (
-
-    <div
-      className={
-        `risk-card ${
-          level.toLowerCase()
-        }`
-      }
-    >
-
-      <div className="risk-card-top">
-
-        <span>
-          {title}
-        </span>
-
-        <div className="risk-status-dot"></div>
-
-      </div>
-
-
-      <strong>
-        {level}
-      </strong>
-
-
-      <small>
-
-        {level === "Low" &&
-          "Low level"}
-
-        {level === "Medium" &&
-          "Needs attention"}
-
-        {level === "High" &&
-          "Immediate attention"}
-
-        {level === "Review" &&
-          "Review required"}
-
-      </small>
-
-    </div>
-
-  );
-
-}
-
-
-export default FarmerReports;
+export default FarmerAnalytics;

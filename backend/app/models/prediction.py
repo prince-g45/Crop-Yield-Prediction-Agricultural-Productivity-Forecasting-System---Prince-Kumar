@@ -6,6 +6,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
 )
+
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 
@@ -16,7 +17,11 @@ class Prediction(Base):
 
     __tablename__ = "predictions"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(
+        Integer,
+        primary_key=True,
+        index=True
+    )
 
     user_id = Column(
         Integer,
@@ -24,50 +29,135 @@ class Prediction(Base):
         nullable=False
     )
 
-    farm_name = Column(String, nullable=False)
+    farm_name = Column(
+        String,
+        nullable=False
+    )
 
-    state = Column(String, nullable=False)
+    state = Column(
+        String,
+        nullable=False
+    )
 
-    crop = Column(String, nullable=False)
+    crop = Column(
+        String,
+        nullable=False
+    )
 
-    season = Column(String, nullable=False)
+    season = Column(
+        String,
+        nullable=False
+    )
 
-    area = Column(Float, nullable=False)
+    area = Column(
+        Float,
+        nullable=False
+    )
 
-    fertilizer = Column(Float, nullable=False)
+    fertilizer = Column(
+        Float,
+        nullable=False
+    )
 
-    pesticide = Column(Float, nullable=False)
+    pesticide = Column(
+        Float,
+        nullable=False
+    )
 
-    predicted_yield = Column(Float, nullable=False)
+    predicted_yield = Column(
+        Float,
+        nullable=False
+    )
 
-    estimated_production = Column(Float, nullable=False)
+    estimated_production = Column(
+        Float,
+        nullable=False
+    )
+
+
+    # =====================================
+    # Current Weather
+    # =====================================
+
+    temperature = Column(
+        Float,
+        nullable=True
+    )
+
+    rainfall = Column(
+        Float,
+        nullable=True
+    )
+
+    humidity = Column(
+        Float,
+        nullable=True
+    )
+
 
     # =====================================
     # Soil Analysis
     # =====================================
 
-    N = Column(Float, nullable=False)
+    N = Column(
+        Float,
+        nullable=False
+    )
 
-    P = Column(Float, nullable=False)
+    P = Column(
+        Float,
+        nullable=False
+    )
 
-    K = Column(Float, nullable=False)
+    K = Column(
+        Float,
+        nullable=False
+    )
 
-    pH = Column(Float, nullable=False)
+    pH = Column(
+        Float,
+        nullable=False
+    )
 
-    soil_health = Column(String, nullable=False)
+    soil_health = Column(
+        String,
+        nullable=False
+    )
 
-    recommended_crop = Column(String, nullable=False)
+    recommended_crop = Column(
+        String,
+        nullable=False
+    )
 
-    recommendation = Column(String, nullable=False)
+    recommendation = Column(
+        String,
+        nullable=False
+    )
 
-    agricultural_report = Column(String, nullable=True)
 
+    # =====================================
+    # Agricultural AI Report
+    # =====================================
+
+    agricultural_report = Column(
+        String,
+        nullable=True
+    )
+
+
+    # =====================================
+    # Created At
     # =====================================
 
     created_at = Column(
         DateTime(timezone=True),
         server_default=func.now()
     )
+
+
+    # =====================================
+    # User Relationship
+    # =====================================
 
     user = relationship(
         "User",

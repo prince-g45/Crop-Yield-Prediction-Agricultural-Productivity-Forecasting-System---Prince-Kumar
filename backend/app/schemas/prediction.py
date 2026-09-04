@@ -7,9 +7,13 @@ from datetime import datetime
 # ======================================
 
 class WeatherYear(BaseModel):
+
     year: int
+
     rainfall_mm: float
+
     temperature_c: float
+
     humidity_percent: float
 
 
@@ -32,6 +36,21 @@ class WeatherAnalysis(BaseModel):
     )
 
     summary: str | None = None
+
+
+# ======================================
+# RISK ASSESSMENT
+# ======================================
+
+class RiskAssessment(BaseModel):
+
+    score: int
+
+    level: str
+
+    factors: list[str] = Field(
+        default_factory=list
+    )
 
 
 # ======================================
@@ -85,6 +104,18 @@ class PredictionResponse(BaseModel):
 
     estimated_production: float
 
+
+    # ==========================
+    # CURRENT WEATHER
+    # ==========================
+
+    temperature: float | None = None
+
+    rainfall: float | None = None
+
+    humidity: float | None = None
+
+
     # ==========================
     # SOIL ANALYSIS
     # ==========================
@@ -103,11 +134,13 @@ class PredictionResponse(BaseModel):
 
     recommendation: str
 
+
     # ==========================
     # GEMINI AGRICULTURAL REPORT
     # ==========================
 
     agricultural_report: str | None = None
+
 
     # ==========================
     # WEATHER ANALYSIS
@@ -115,11 +148,21 @@ class PredictionResponse(BaseModel):
 
     weather_analysis: WeatherAnalysis | None = None
 
+
+    # ==========================
+    # RISK ASSESSMENT
+    # ==========================
+
+    risk_assessment: RiskAssessment | None = None
+
+
     # ==========================
     # CREATED AT
     # ==========================
 
     created_at: datetime
 
+
     class Config:
+
         from_attributes = True

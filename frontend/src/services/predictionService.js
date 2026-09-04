@@ -1,14 +1,10 @@
 import axios from "axios";
 
-// ======================================
-// Base URL
-// ======================================
-
 const API = "http://localhost:8000/api/v1/prediction";
 
-// ======================================
-// Common Headers
-// ======================================
+// ==========================================
+// Authentication Headers
+// ==========================================
 
 const getHeaders = () => {
 
@@ -19,12 +15,12 @@ const getHeaders = () => {
       Authorization: `Bearer ${token}`,
     },
   };
-
 };
 
-// ======================================
-// Predict Crop Yield
-// ======================================
+
+// ==========================================
+// Predict Yield
+// ==========================================
 
 export const predictYield = async (data) => {
 
@@ -35,12 +31,12 @@ export const predictYield = async (data) => {
   );
 
   return response.data;
-
 };
 
-// ======================================
-// Get Metadata
-// ======================================
+
+// ==========================================
+// Prediction Metadata
+// ==========================================
 
 export const getPredictionMetadata = async () => {
 
@@ -50,12 +46,12 @@ export const getPredictionMetadata = async () => {
   );
 
   return response.data;
-
 };
 
-// ======================================
-// Get Prediction History
-// ======================================
+
+// ==========================================
+// Farmer Prediction History
+// ==========================================
 
 export const getPredictionHistory = async () => {
 
@@ -65,12 +61,27 @@ export const getPredictionHistory = async () => {
   );
 
   return response.data;
-
 };
 
-// ======================================
+
+// ==========================================
+// Admin - All Prediction History
+// ==========================================
+
+export const getAdminPredictionHistory = async () => {
+
+  const response = await axios.get(
+    `${API}/admin/history`,
+    getHeaders()
+  );
+
+  return response.data;
+};
+
+
+// ==========================================
 // Delete Prediction
-// ======================================
+// ==========================================
 
 export const deletePrediction = async (predictionId) => {
 
@@ -80,5 +91,4 @@ export const deletePrediction = async (predictionId) => {
   );
 
   return response.data;
-
 };

@@ -34,6 +34,14 @@ from app.core.weather_analysis import (
     get_historical_weather_analysis
 )
 
+# ======================================
+# Risk Assessment
+# ======================================
+
+from app.core.risk_assessment import (
+    calculate_risk_assessment
+)
+
 from app.core.deps import get_current_user
 from app.core.gemini import generate_agriculture_report
 
@@ -84,8 +92,7 @@ def predict_crop_yield(
     # ======================================
     # CURRENT WEATHER
     #
-    # This remains exactly as before.
-    # It is used by the trained ML model.
+    # Used by the trained ML model.
     # ======================================
 
     weather = get_weather(
@@ -97,9 +104,7 @@ def predict_crop_yield(
     # ======================================
     # HISTORICAL WEATHER ANALYSIS
     #
-    # This uses YieldSense_datasets.csv.
-    #
-    # It is NOT current weather.
+    # Uses YieldSense_datasets.csv.
     # ======================================
 
     weather_analysis = (
@@ -150,8 +155,7 @@ def predict_crop_yield(
     # ======================================
     # MODEL INPUT
     #
-    # YOUR TRAINED MODEL INPUT
-    # REMAINS UNCHANGED
+    # TRAINED MODEL INPUT REMAINS UNCHANGED
     # ======================================
 
     input_data = pd.DataFrame([{
@@ -241,6 +245,25 @@ def predict_crop_yield(
 
 
     # ======================================
+    # RISK ASSESSMENT
+    # ======================================
+
+    risk_assessment = calculate_risk_assessment(
+
+        temperature=weather["temperature"],
+
+        rainfall=weather["rainfall"],
+
+        humidity=weather["humidity"],
+
+        soil_health=soil["soil_health"],
+
+        weather_analysis=weather_analysis,
+
+    )
+
+
+    # ======================================
     # SAVE PREDICTION
     # ======================================
 
@@ -265,6 +288,17 @@ def predict_crop_yield(
         predicted_yield=predicted_yield,
 
         estimated_production=estimated_production,
+
+
+        # ==========================
+        # CURRENT WEATHER
+        # ==========================
+
+        temperature=weather["temperature"],
+
+        rainfall=weather["rainfall"],
+
+        humidity=weather["humidity"],
 
 
         # ==========================
@@ -309,11 +343,12 @@ def predict_crop_yield(
     # ======================================
     # BUILD FINAL RESPONSE
     #
-    # Same Prediction Result contains:
-    #
+    # Contains:
     # Yield
     # Soil Analysis
-    # Weather Analysis
+    # Current Weather
+    # Historical Weather
+    # Risk Assessment
     # AI Report
     # ======================================
 
@@ -325,12 +360,16 @@ def predict_crop_yield(
         weather_analysis
     )
 
+    response.risk_assessment = (
+        risk_assessment
+    )
+
 
     return response
 
 
 # ======================================
-# Prediction History
+# Farmer Prediction History
 # ======================================
 
 @router.get(
@@ -353,7 +392,191 @@ def get_prediction_history(
         .all()
     )
 
-    return predictions
+    responses = []
+
+    for prediction in predictions:
+
+        response = PredictionResponse.model_validate(
+            prediction
+        )
+
+        # ======================================
+        # Historical Weather Analysis
+        # ======================================
+
+        try:
+
+            weather_analysis = (
+                get_historical_weather_analysis(
+                    crop=prediction.crop,
+                    state=prediction.state,
+                    season=prediction.season,
+                )
+            )
+
+            response.weather_analysis = (
+                weather_analysis
+            )
+
+        except Exception as error:
+
+            print(
+                "Historical weather analysis failed:",
+                error
+            )
+
+            response.weather_analysis = None
+
+        # ======================================
+        # Risk Assessment
+        # ======================================
+
+        try:
+
+            risk_assessment = (
+                calculate_risk_assessment(
+                    temperature=prediction.temperature,
+                    rainfall=prediction.rainfall,
+                    humidity=prediction.humidity,
+                    soil_health=prediction.soil_health,
+                    weather_analysis=weather_analysis,
+                )
+            )
+
+            response.risk_assessment = (
+                risk_assessment
+            )
+
+        except Exception as error:
+
+            print(
+                "Risk assessment failed:",
+                error
+            )
+
+            response.risk_assessment = None
+
+        responses.append(response)
+
+    return responses
+
+
+# ======================================
+# Admin Prediction History
+# ======================================
+
+@router.get(
+    "/admin/history",
+    response_model=list[PredictionResponse]
+)
+def get_admin_prediction_history(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+
+    admin_role = (
+        str(current_user.role or "")
+        .strip()
+        .lower()
+    )
+
+    print("ADMIN EMAIL:", current_user.email)
+    print("ADMIN ROLE:", repr(current_user.role))
+    print("NORMALIZED ROLE:", repr(admin_role))
+
+    if admin_role != "admin":
+
+        print("ADMIN ACCESS DENIED")
+
+        raise HTTPException(
+            status_code=403,
+            detail="Admin access required"
+        )
+
+    print("ADMIN ACCESS GRANTED")
+
+    predictions = (
+        db.query(Prediction)
+        .order_by(
+            desc(Prediction.created_at)
+        )
+        .all()
+    )
+
+    responses = []
+
+    for prediction in predictions:
+
+        response = PredictionResponse.model_validate(
+            prediction
+        )
+
+        # ======================================
+        # Historical Weather Analysis
+        # ======================================
+
+        try:
+
+            weather_analysis = (
+                get_historical_weather_analysis(
+                    crop=prediction.crop,
+                    state=prediction.state,
+                    season=prediction.season,
+                )
+            )
+
+            response.weather_analysis = (
+                weather_analysis
+            )
+
+        except Exception as error:
+
+            print(
+                "Historical weather analysis failed:",
+                error
+            )
+
+            response.weather_analysis = None
+
+            weather_analysis = None
+
+        # ======================================
+        # Risk Assessment
+        # ======================================
+
+        try:
+
+            risk_assessment = (
+                calculate_risk_assessment(
+                    temperature=prediction.temperature,
+                    rainfall=prediction.rainfall,
+                    humidity=prediction.humidity,
+                    soil_health=prediction.soil_health,
+                    weather_analysis=weather_analysis,
+                )
+            )
+
+            response.risk_assessment = (
+                risk_assessment
+            )
+
+        except Exception as error:
+
+            print(
+                "Risk assessment failed:",
+                error
+            )
+
+            response.risk_assessment = None
+
+        responses.append(response)
+
+    print(
+        "TOTAL ADMIN PREDICTIONS:",
+        len(responses)
+    )
+
+    return responses
 
 
 # ======================================
@@ -391,6 +614,56 @@ def delete_prediction(
         "success": True,
         "message": "Prediction deleted successfully"
     }
+@router.get(
+    "/admin/history",
+    response_model=list[PredictionResponse]
+)
+def get_admin_prediction_history(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+
+    print("ADMIN EMAIL:", current_user.email)
+    print("ADMIN ROLE:", repr(current_user.role))
+
+    if not current_user.role or current_user.role.lower() != "admin":
+        raise HTTPException(
+            status_code=403,
+            detail=f"Admin access required. Current role: {current_user.role}"
+        )
+
+    predictions = (
+        db.query(Prediction)
+        .order_by(
+            desc(Prediction.created_at)
+        )
+        .all()
+    )
+
+    return predictions
+    # --------------------------------------
+    # Admin Access Check
+    # --------------------------------------
+
+    if not current_user.role or current_user.role.lower() != "admin":
+        raise HTTPException(
+            status_code=403,
+            detail="Admin access required"
+        )
+
+    # --------------------------------------
+    # Get All Predictions
+    # --------------------------------------
+
+    predictions = (
+        db.query(Prediction)
+        .order_by(
+            desc(Prediction.created_at)
+        )
+        .all()
+    )
+
+    return predictions
 
 
 # ======================================
