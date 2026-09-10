@@ -189,10 +189,7 @@ function Signup() {
                   Farmer
                 </option>
 
-                <option value="Agriculture Department">
-                  Agriculture Department
-                </option>
-
+                
               </select>
 
             </div>

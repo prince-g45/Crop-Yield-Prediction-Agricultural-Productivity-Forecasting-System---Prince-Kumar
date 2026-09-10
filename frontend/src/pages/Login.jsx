@@ -15,9 +15,15 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // ===========================
-  // Normal Login
-  // ===========================
+  // =====================================================
+  // HARD-CODED ADMIN EMAIL
+  // =====================================================
+
+  const ADMIN_EMAIL = "princesingh030903@gmail.com";
+
+  // =====================================================
+  // NORMAL LOGIN
+  // =====================================================
 
   const handleLogin = async (e) => {
 
@@ -28,21 +34,29 @@ function Login() {
     try {
 
       const response = await api.post("/auth/login", {
-
         email,
-
         password,
-
       });
 
+      // Save access token
       localStorage.setItem(
         "access_token",
         response.data.access_token
       );
 
+      // =================================================
+      // HARD-CODE ADMIN ROLE
+      // =================================================
+
+      const userRole =
+        response.data.email?.toLowerCase() === ADMIN_EMAIL
+          ? "Administrator"
+          : response.data.role;
+
+      // Save user information
       localStorage.setItem(
         "role",
-        response.data.role
+        userRole
       );
 
       localStorage.setItem(
@@ -55,7 +69,11 @@ function Login() {
         response.data.email
       );
 
-      switch (response.data.role) {
+      // =================================================
+      // REDIRECT BASED ON ROLE
+      // =================================================
+
+      switch (userRole) {
 
         case "Farmer":
           navigate("/farmer-dashboard");
@@ -79,26 +97,22 @@ function Login() {
 
         default:
           navigate("/");
-
       }
 
     } catch (err) {
 
       setError(
-
         err.response?.data?.detail ||
-
         "Invalid Email or Password"
-
       );
 
     }
 
   };
 
-  // ===========================
-  // Google Login
-  // ===========================
+  // =====================================================
+  // GOOGLE LOGIN
+  // =====================================================
 
   const handleGoogleLogin = async (credentialResponse) => {
 
@@ -107,20 +121,29 @@ function Login() {
       const response = await api.post(
         "/auth/google/login",
         {
-
           credential: credentialResponse.credential,
-
         }
       );
 
+      // Save access token
       localStorage.setItem(
         "access_token",
         response.data.token
       );
 
+      // =================================================
+      // HARD-CODE ADMIN ROLE FOR GOOGLE LOGIN
+      // =================================================
+
+      const userRole =
+        response.data.email?.toLowerCase() === ADMIN_EMAIL
+          ? "Administrator"
+          : response.data.role;
+
+      // Save user information
       localStorage.setItem(
         "role",
-        response.data.role
+        userRole
       );
 
       localStorage.setItem(
@@ -133,7 +156,11 @@ function Login() {
         response.data.email
       );
 
-      switch (response.data.role) {
+      // =================================================
+      // REDIRECT BASED ON ROLE
+      // =================================================
+
+      switch (userRole) {
 
         case "Farmer":
           navigate("/farmer-dashboard");
@@ -157,22 +184,22 @@ function Login() {
 
         default:
           navigate("/");
-
       }
 
     } catch (error) {
 
       alert(
-
         error.response?.data?.detail ||
-
         "Google Login Failed"
-
       );
 
     }
 
   };
+
+  // =====================================================
+  // UI
+  // =====================================================
 
   return (
 
@@ -198,6 +225,8 @@ function Login() {
             Sign in to continue
 
           </p>
+
+          {/* ================= NORMAL LOGIN ================= */}
 
           <form onSubmit={handleLogin}>
 
@@ -233,19 +262,17 @@ function Login() {
 
             </div>
 
-            {
+            {/* Error */}
 
-              error && (
+            {error && (
 
-                <p className="error-message">
+              <p className="error-message">
 
-                  {error}
+                {error}
 
-                </p>
+              </p>
 
-              )
-
-            }
+            )}
 
             <button type="submit">
 
@@ -255,7 +282,7 @@ function Login() {
 
           </form>
 
-          {/* Google Login */}
+          {/* ================= GOOGLE LOGIN ================= */}
 
           <div className="divider">
 
@@ -278,6 +305,8 @@ function Login() {
             />
 
           </div>
+
+          {/* ================= SIGN UP ================= */}
 
           <p className="signup-text">
 
