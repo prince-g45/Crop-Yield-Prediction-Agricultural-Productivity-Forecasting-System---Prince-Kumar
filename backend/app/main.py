@@ -47,7 +47,8 @@ app.add_middleware(
     CORSMiddleware,
 
     allow_origins=[
-        "http://localhost:5173",
+        "http://localhost:5173"
+        "https://crop-yield-frontend-5inb.onrender.com",
     ],
 
     allow_credentials=True,
