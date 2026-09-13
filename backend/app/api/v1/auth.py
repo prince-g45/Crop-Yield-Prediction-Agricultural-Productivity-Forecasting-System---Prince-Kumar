@@ -220,11 +220,13 @@ def google_signup(
 
         }
 
-    except Exception:
+        
 
+    except Exception as e:
+        print("Google Login Error:", str(e))
         raise HTTPException(
             status_code=401,
-            detail="Invalid Google Token"
+            detail="Invalid Google Login"
         )
 
 
