@@ -12,3 +12,4 @@ scikit-learn
 joblib
 email-validator
 passlib
+python-jose
