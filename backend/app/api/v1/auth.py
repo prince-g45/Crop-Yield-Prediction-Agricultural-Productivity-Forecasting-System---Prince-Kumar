@@ -124,7 +124,7 @@ def save_google_user(
         )
 
     # Random password because Google users don't login using password
-    random_password = hash_password(data.google_id)
+    random_password = hash_password(data.google_id[:72])
 
     new_user = User(
 
