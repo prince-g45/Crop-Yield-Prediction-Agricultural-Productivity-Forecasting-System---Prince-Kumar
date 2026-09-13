@@ -11,3 +11,4 @@ numpy
 scikit-learn
 joblib
 email-validator
+passlib
