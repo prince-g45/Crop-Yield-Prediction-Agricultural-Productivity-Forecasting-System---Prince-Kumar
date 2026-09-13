@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from google.oauth2 import id_token
 from google.auth.transport import requests
+import os
 
 from app.schemas.google import (
     GoogleLoginRequest,
@@ -24,6 +25,18 @@ from app.core.deps import get_current_user
 router = APIRouter()
 
 
+# ===========================
+# Admin Credentials
+# ===========================
+
+ADMIN_EMAIL = os.getenv("ADMIN_EMAIL")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
+
+
+# ===========================
+# Database
+# ===========================
+
 def get_db():
     db = SessionLocal()
     try:
@@ -37,7 +50,10 @@ def get_db():
 # ===========================
 
 @router.post("/signup", response_model=UserResponse)
-def signup(user_data: UserCreate, db: Session = Depends(get_db)):
+def signup(
+    user_data: UserCreate,
+    db: Session = Depends(get_db)
+):
 
     existing_user = db.query(User).filter(
         User.email == user_data.email
@@ -49,7 +65,9 @@ def signup(user_data: UserCreate, db: Session = Depends(get_db)):
             detail="Email already registered"
         )
 
-    hashed_password = hash_password(user_data.password)
+    hashed_password = hash_password(
+        user_data.password
+    )
 
     new_user = User(
         full_name=user_data.full_name,
@@ -70,18 +88,24 @@ def signup(user_data: UserCreate, db: Session = Depends(get_db)):
 # ===========================
 
 @router.post("/login")
-def login(user_data: UserLogin, db: Session = Depends(get_db)):
+def login(
+    user_data: UserLogin,
+    db: Session = Depends(get_db)
+):
 
     # ===========================
-    # Hard-coded Admin Login
+    # Admin Login
     # ===========================
 
     if (
-        user_data.email == "admin@gmail.com"
-        and user_data.password == "Admin123"
+        ADMIN_EMAIL
+        and ADMIN_PASSWORD
+        and user_data.email == ADMIN_EMAIL
+        and user_data.password == ADMIN_PASSWORD
     ):
+
         access_token = create_access_token(
-            data={"sub": "admin@gmail.com"}
+            data={"sub": ADMIN_EMAIL}
         )
 
         return {
@@ -89,7 +113,7 @@ def login(user_data: UserLogin, db: Session = Depends(get_db)):
             "token_type": "bearer",
             "role": "Admin",
             "full_name": "Admin",
-            "email": "admin@gmail.com"
+            "email": ADMIN_EMAIL
         }
 
     # ===========================
@@ -148,8 +172,11 @@ def save_google_user(
             detail="Account already exists"
         )
 
-    # Random password because Google users don't login using password
-    random_password = hash_password(data.google_id[:72])
+    # Random password because Google users
+    # don't login using password
+    random_password = hash_password(
+        data.google_id[:72]
+    )
 
     new_user = User(
         full_name=data.full_name,
@@ -179,7 +206,10 @@ def save_google_user(
 # Current User
 # ===========================
 
-@router.get("/me", response_model=UserResponse)
+@router.get(
+    "/me",
+    response_model=UserResponse
+)
 def get_me(
     current_user: User = Depends(get_current_user)
 ):
@@ -212,6 +242,7 @@ def google_signup(
         ).first()
 
         if existing_user:
+
             return {
                 "exists": True,
                 "message": "Account already exists. Please login."
@@ -228,7 +259,10 @@ def google_signup(
 
     except Exception as e:
 
-        print("Google Login Error:", str(e))
+        print(
+            "Google Login Error:",
+            str(e)
+        )
 
         raise HTTPException(
             status_code=401,
@@ -265,7 +299,10 @@ def google_login(
 
             raise HTTPException(
                 status_code=404,
-                detail="Google account not registered. Please signup first."
+                detail=(
+                    "Google account not registered. "
+                    "Please signup first."
+                )
             )
 
         access_token = create_access_token(
@@ -285,7 +322,10 @@ def google_login(
 
     except Exception as e:
 
-        print("Google Login Error:", str(e))
+        print(
+            "Google Login Error:",
+            str(e)
+        )
 
         raise HTTPException(
             status_code=401,
