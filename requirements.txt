@@ -13,3 +13,4 @@ joblib
 email-validator
 passlib
 python-jose
+bcrypt
