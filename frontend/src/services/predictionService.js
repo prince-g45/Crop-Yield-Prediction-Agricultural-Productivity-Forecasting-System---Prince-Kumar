@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API = "http://98.84.152.196:8000/api/v1/prediction";
+//const API = "http://98.84.152.196:8000/api/v1/prediction";
+const API = "https://crop-yield-prediction-agricultural.onrender.com/api/v1/prediction";
 
 // ==========================================
 // Authentication Headers

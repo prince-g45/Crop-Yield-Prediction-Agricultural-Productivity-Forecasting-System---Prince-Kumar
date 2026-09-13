@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://98.84.152.196:8000/api/v1",
+  //baseURL: "http://98.84.152.196:8000/api/v1",
+  baseURL: "https://crop-yield-prediction-agricultural.onrender.com/api/v1",
 });
 
 
