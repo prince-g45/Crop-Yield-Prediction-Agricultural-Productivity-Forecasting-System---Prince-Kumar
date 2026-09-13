@@ -32,13 +32,31 @@ def get_db():
 
 
 # ==========================================
+# ADMIN ONLY
+# ==========================================
+
+def get_admin_user(
+    current_user: User = Depends(get_current_user)
+):
+
+    if current_user.role != "Admin":
+
+        raise HTTPException(
+            status_code=403,
+            detail="Admin access required"
+        )
+
+    return current_user
+
+
+# ==========================================
 # ADMIN DASHBOARD
 # ==========================================
 
 @router.get("/dashboard")
 def get_admin_dashboard(
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_admin_user),
 ):
 
     # --------------------------------------
@@ -181,7 +199,7 @@ def get_admin_dashboard(
 @router.get("/farmers")
 def get_all_farmers(
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_admin_user),
 ):
 
     farmers = (
@@ -228,7 +246,7 @@ def get_all_farmers(
 def update_farmer_status(
     farmer_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_admin_user),
 ):
 
     farmer = (
@@ -291,7 +309,7 @@ def update_farmer_status(
 def delete_farmer(
     farmer_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_admin_user),
 ):
 
     farmer = (
